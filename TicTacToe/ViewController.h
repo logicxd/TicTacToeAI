@@ -1,15 +1,15 @@
+////
+////  ViewController.h
+////  SkyscannerTripDetails
+////
+////  Created by Alaric Gonzales on 6/30/16.
+////  Copyright © 2016 Alaric Gonzales. All rights reserved.
+////
 //
-//  ViewController.h
-//  TicTacToe
+//#import <UIKit/UIKit.h>
 //
-//  Created by Alaric Gonzales on 8/1/16.
-//  Copyright © 2016 Alaric Gonzales. All rights reserved.
+//@interface ViewController : UIViewController
 //
-
-#import <UIKit/UIKit.h>
-
-@interface ViewController : UIViewController
-
-
-@end
-
+//
+//@end
+//

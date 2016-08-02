@@ -7,15 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2739ED69445C706E9ED11BD2 /* libPods-TicTacToe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3372A0892EA057282BFEF8C2 /* libPods-TicTacToe.a */; };
 		6D34448D1D4FECD9002CF6D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D34448C1D4FECD9002CF6D6 /* main.m */; };
 		6D3444901D4FECD9002CF6D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D34448F1D4FECD9002CF6D6 /* AppDelegate.m */; };
 		6D3444931D4FECD9002CF6D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3444921D4FECD9002CF6D6 /* ViewController.m */; };
 		6D3444961D4FECD9002CF6D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D3444941D4FECD9002CF6D6 /* Main.storyboard */; };
 		6D3444981D4FECD9002CF6D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D3444971D4FECD9002CF6D6 /* Assets.xcassets */; };
 		6D34449B1D4FECD9002CF6D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D3444991D4FECD9002CF6D6 /* LaunchScreen.storyboard */; };
+		6DE6E0111D4FEEDF00A4C23F /* TicTacToeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E0101D4FEEDF00A4C23F /* TicTacToeTableViewController.m */; };
+		6DE6E0171D4FEF9200A4C23F /* TTTTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E0161D4FEF9200A4C23F /* TTTTopTableViewCell.m */; };
+		6DE6E01B1D50096F00A4C23F /* TTTMiddleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E01A1D50096F00A4C23F /* TTTMiddleTableViewCell.m */; };
+		6DE6E01E1D500C0A00A4C23F /* TTTBottomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E01D1D500C0A00A4C23F /* TTTBottomTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3372A0892EA057282BFEF8C2 /* libPods-TicTacToe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TicTacToe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D3444881D4FECD9002CF6D6 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D34448C1D4FECD9002CF6D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6D34448E1D4FECD9002CF6D6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -23,9 +29,19 @@
 		6D3444911D4FECD9002CF6D6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6D3444921D4FECD9002CF6D6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6D3444951D4FECD9002CF6D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6D3444971D4FECD9002CF6D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6D3444971D4FECD9002CF6D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = TicTacToe/Assets.xcassets; sourceTree = "<group>"; };
 		6D34449A1D4FECD9002CF6D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		6D34449C1D4FECD9002CF6D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D34449C1D4FECD9002CF6D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = TicTacToe/Info.plist; sourceTree = "<group>"; };
+		6DE6E00F1D4FEEDF00A4C23F /* TicTacToeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicTacToeTableViewController.h; sourceTree = "<group>"; };
+		6DE6E0101D4FEEDF00A4C23F /* TicTacToeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicTacToeTableViewController.m; sourceTree = "<group>"; };
+		6DE6E0151D4FEF9200A4C23F /* TTTTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTTopTableViewCell.h; sourceTree = "<group>"; };
+		6DE6E0161D4FEF9200A4C23F /* TTTTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTopTableViewCell.m; sourceTree = "<group>"; };
+		6DE6E0191D50096F00A4C23F /* TTTMiddleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTMiddleTableViewCell.h; sourceTree = "<group>"; };
+		6DE6E01A1D50096F00A4C23F /* TTTMiddleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTMiddleTableViewCell.m; sourceTree = "<group>"; };
+		6DE6E01C1D500C0A00A4C23F /* TTTBottomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTBottomTableViewCell.h; sourceTree = "<group>"; };
+		6DE6E01D1D500C0A00A4C23F /* TTTBottomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTBottomTableViewCell.m; sourceTree = "<group>"; };
+		A2AEF72B480A4750FAE663AA /* Pods-TicTacToe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TicTacToe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe.debug.xcconfig"; sourceTree = "<group>"; };
+		CC7F288EF3FB43798AC948AB /* Pods-TicTacToe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TicTacToe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2739ED69445C706E9ED11BD2 /* libPods-TicTacToe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,8 +59,11 @@
 		6D34447F1D4FECD9002CF6D6 = {
 			isa = PBXGroup;
 			children = (
+				6DE6E0181D4FEFB300A4C23F /* Junk */,
 				6D34448A1D4FECD9002CF6D6 /* TicTacToe */,
 				6D3444891D4FECD9002CF6D6 /* Products */,
+				71274B013F68B807BF2FB793 /* Pods */,
+				FF2FD1620BEEFB5259C0DED9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,14 +78,18 @@
 		6D34448A1D4FECD9002CF6D6 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				6DE6E0151D4FEF9200A4C23F /* TTTTopTableViewCell.h */,
+				6DE6E0161D4FEF9200A4C23F /* TTTTopTableViewCell.m */,
+				6DE6E0191D50096F00A4C23F /* TTTMiddleTableViewCell.h */,
+				6DE6E01A1D50096F00A4C23F /* TTTMiddleTableViewCell.m */,
+				6DE6E01C1D500C0A00A4C23F /* TTTBottomTableViewCell.h */,
+				6DE6E01D1D500C0A00A4C23F /* TTTBottomTableViewCell.m */,
+				6DE6E00F1D4FEEDF00A4C23F /* TicTacToeTableViewController.h */,
+				6DE6E0101D4FEEDF00A4C23F /* TicTacToeTableViewController.m */,
 				6D34448E1D4FECD9002CF6D6 /* AppDelegate.h */,
 				6D34448F1D4FECD9002CF6D6 /* AppDelegate.m */,
 				6D3444911D4FECD9002CF6D6 /* ViewController.h */,
 				6D3444921D4FECD9002CF6D6 /* ViewController.m */,
-				6D3444941D4FECD9002CF6D6 /* Main.storyboard */,
-				6D3444971D4FECD9002CF6D6 /* Assets.xcassets */,
-				6D3444991D4FECD9002CF6D6 /* LaunchScreen.storyboard */,
-				6D34449C1D4FECD9002CF6D6 /* Info.plist */,
 				6D34448B1D4FECD9002CF6D6 /* Supporting Files */,
 			);
 			path = TicTacToe;
@@ -79,6 +103,34 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		6DE6E0181D4FEFB300A4C23F /* Junk */ = {
+			isa = PBXGroup;
+			children = (
+				6D3444941D4FECD9002CF6D6 /* Main.storyboard */,
+				6D34449C1D4FECD9002CF6D6 /* Info.plist */,
+				6D3444991D4FECD9002CF6D6 /* LaunchScreen.storyboard */,
+				6D3444971D4FECD9002CF6D6 /* Assets.xcassets */,
+			);
+			name = Junk;
+			sourceTree = "<group>";
+		};
+		71274B013F68B807BF2FB793 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A2AEF72B480A4750FAE663AA /* Pods-TicTacToe.debug.xcconfig */,
+				CC7F288EF3FB43798AC948AB /* Pods-TicTacToe.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		FF2FD1620BEEFB5259C0DED9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3372A0892EA057282BFEF8C2 /* libPods-TicTacToe.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -86,9 +138,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6D34449F1D4FECD9002CF6D6 /* Build configuration list for PBXNativeTarget "TicTacToe" */;
 			buildPhases = (
+				7CEA306D01F0393D1B8AD314 /* [CP] Check Pods Manifest.lock */,
 				6D3444841D4FECD9002CF6D6 /* Sources */,
 				6D3444851D4FECD9002CF6D6 /* Frameworks */,
 				6D3444861D4FECD9002CF6D6 /* Resources */,
+				F172CF5B4520D41587E33196 /* [CP] Embed Pods Frameworks */,
+				A458DD741DEDFA6865365701 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -144,12 +199,64 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		7CEA306D01F0393D1B8AD314 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A458DD741DEDFA6865365701 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F172CF5B4520D41587E33196 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6D3444841D4FECD9002CF6D6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DE6E0111D4FEEDF00A4C23F /* TicTacToeTableViewController.m in Sources */,
+				6DE6E01B1D50096F00A4C23F /* TTTMiddleTableViewCell.m in Sources */,
 				6D3444931D4FECD9002CF6D6 /* ViewController.m in Sources */,
+				6DE6E01E1D500C0A00A4C23F /* TTTBottomTableViewCell.m in Sources */,
+				6DE6E0171D4FEF9200A4C23F /* TTTTopTableViewCell.m in Sources */,
 				6D3444901D4FECD9002CF6D6 /* AppDelegate.m in Sources */,
 				6D34448D1D4FECD9002CF6D6 /* main.m in Sources */,
 			);
@@ -164,6 +271,7 @@
 				6D3444951D4FECD9002CF6D6 /* Base */,
 			);
 			name = Main.storyboard;
+			path = TicTacToe;
 			sourceTree = "<group>";
 		};
 		6D3444991D4FECD9002CF6D6 /* LaunchScreen.storyboard */ = {
@@ -172,6 +280,7 @@
 				6D34449A1D4FECD9002CF6D6 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = TicTacToe;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -261,6 +370,7 @@
 		};
 		6D3444A01D4FECD9002CF6D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2AEF72B480A4750FAE663AA /* Pods-TicTacToe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TicTacToe/Info.plist;
@@ -272,6 +382,7 @@
 		};
 		6D3444A11D4FECD9002CF6D6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC7F288EF3FB43798AC948AB /* Pods-TicTacToe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TicTacToe/Info.plist;
@@ -300,6 +411,7 @@
 				6D3444A11D4FECD9002CF6D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

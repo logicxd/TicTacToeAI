@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class TicTacToeTableViewController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) TicTacToeTableViewController *viewController;
 
 
 @end
