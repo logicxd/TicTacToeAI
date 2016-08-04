@@ -7,13 +7,12 @@
 //
 
 #import "TicTacToeTableViewController.h"
-#import "TTTTopTableViewCell.h"
-#import "TTTMiddleTableViewCell.h"
-#import "TTTBottomTableViewCell.h"
+#import "TTTCell.h"
 
 @interface TicTacToeTableViewController () <UITableViewDelegate, UITableViewDataSource>
-@property (strong, nonatomic) UITableView *view;
-
+@property (nonatomic, strong) UITableView *view;
+@property (nonatomic) NSInteger nextTurn;
+@property (nonatomic, strong) NSMutableDictionary *board;
 @end
 
 @implementation TicTacToeTableViewController
@@ -23,14 +22,23 @@
     self.view.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.separatorColor = [UIColor blackColor];
     
-    [self.view registerClass:[TTTTopTableViewCell class] forCellReuseIdentifier:@"TicTacToeTopCell"];
-    [self.view registerClass:[TTTMiddleTableViewCell class] forCellReuseIdentifier:@"TicTacToeMiddleCell"];
-    [self.view registerClass:[TTTBottomTableViewCell class] forCellReuseIdentifier:@"TicTacToeBottomCell"];
-
+    [self.view registerClass:[TTTCell class] forCellReuseIdentifier:@"TTTCell"];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.board = [@{
+                    @0 : @"0",
+                    @1 : @"1",
+                    @2 : @"2",
+                    @3 : @"3",
+                    @4 : @"4",
+                    @5 : @"5",
+                    @6 : @"6",
+                    @7 : @"7",
+                    @8 : @"8",
+                   } mutableCopy];
     
     self.view.delegate = self;
     self.view.dataSource = self;
@@ -63,27 +71,30 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0) {
+    __weak typeof(self) weakSelf = self;
     
-        TTTTopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TicTacToeTopCell" forIndexPath:indexPath];
-        
-        return cell;
-        
-    } else if (indexPath.row == 1) {
-        
-        TTTMiddleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TicTacToeMiddleCell" forIndexPath:indexPath];
-        
-        return cell;
+    TTTCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TTTCell" forIndexPath:indexPath];
+    cell.rowIndex = indexPath.row;
+    cell.buttonHit = ^(NSInteger index) {
+        weakSelf.board[@(index)] = @"X";
+        [weakSelf.view reloadData];
+    };
+    
+    if (indexPath.row == 2) {
+        cell.showsBottomLine = NO;
+    } else {
+        cell.showsBottomLine = YES;
     }
     
-        TTTBottomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TicTacToeBottomCell" forIndexPath:indexPath];
-        
-        return cell;
+    [cell.leftButton setTitle:self.board[@(0 + indexPath.row * 3)] forState:UIControlStateNormal];
+    [cell.centerButton setTitle:self.board[@(1 + indexPath.row * 3)] forState:UIControlStateNormal];
+    [cell.rightButton setTitle:self.board[@(2 + indexPath.row * 3)] forState:UIControlStateNormal];
+    
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 120;
 }
-
 
 @end

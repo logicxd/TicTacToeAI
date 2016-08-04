@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "TicTacToeTableViewController.h"
+#import "TTTbot.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +23,8 @@
     self.viewController = viewController;
     [self.window setRootViewController:self.viewController];
     [self.window makeKeyAndVisible];
+    [[TTTBot alloc] init];
+
     return YES;
 }
 
