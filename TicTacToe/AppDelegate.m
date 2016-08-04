@@ -23,7 +23,6 @@
     self.viewController = viewController;
     [self.window setRootViewController:self.viewController];
     [self.window makeKeyAndVisible];
-    [[TTTBot alloc] init];
 
     return YES;
 }

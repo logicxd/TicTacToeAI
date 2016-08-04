@@ -8,11 +8,13 @@
 
 #import "TicTacToeTableViewController.h"
 #import "TTTCell.h"
+#import "TTTBot.h"
 
 @interface TicTacToeTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *view;
 @property (nonatomic) NSInteger nextTurn;
 @property (nonatomic, strong) NSMutableDictionary *board;
+@property (nonatomic, strong) TTTBot *bot;
 @end
 
 @implementation TicTacToeTableViewController
@@ -27,6 +29,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
+    [backgroundQueue addOperationWithBlock:^{
+        TTTBot *bot = [[TTTBot alloc] initWithBotTTTSymbol:@"O" botStartsTheGame:YES];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.bot = bot;
+        }];
+    }];
     
     self.board = [@{
                     @0 : @"0",
@@ -77,6 +87,10 @@
     cell.rowIndex = indexPath.row;
     cell.buttonHit = ^(NSInteger index) {
         weakSelf.board[@(index)] = @"X";
+        
+        NSInteger botPlay = [weakSelf.bot nextMoveWithBoard:weakSelf.board];
+        weakSelf.board[@(botPlay)] = @"O";
+        
         [weakSelf.view reloadData];
     };
     

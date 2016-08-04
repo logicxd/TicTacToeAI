@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface TTTBot : NSObject
-
-@property (nonatomic, strong) NSMutableDictionary *tree;
-@property (nonatomic, strong) NSString *botTTTSymbol;         //Generic "X" and "O" are considered to be used.
-@property (nonatomic, strong) NSString *playerTTTSymbol;
-@property (nonatomic) BOOL botStartsTheGame;
-
 -(instancetype)initWithBotTTTSymbol:(NSString *)symbol botStartsTheGame:(BOOL)botStarts NS_DESIGNATED_INITIALIZER;
-
+-(NSInteger)nextMoveWithBoard:(NSDictionary *)board;
 @end
