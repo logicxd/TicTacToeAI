@@ -19,6 +19,7 @@
 
 @implementation TicTacToeTableViewController
 
+@dynamic view;
 - (void)loadView {
     self.view = [[UITableView alloc] init];
     self.view.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -32,7 +33,7 @@
     
     NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
     [backgroundQueue addOperationWithBlock:^{
-        TTTBot *bot = [[TTTBot alloc] initWithBotTTTSymbol:@"O" botStartsTheGame:YES];
+        TTTBot *bot = [[TTTBot alloc] init];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.bot = bot;
         }];
