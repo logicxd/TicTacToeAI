@@ -57,9 +57,14 @@ static NSString *const kX = @"X";
         self.tree[kBoardKey] = initialBoard;
         self.tree[kPositionIndex] = nil;
         self.tree[kNextPossibleBoardsKey] = [self nextPossibleBoardsWithBoard:initialBoard depthLevel:@1];
-        self.tree[kScoreKey] = [self scoreFromNextPossibleBoard:self.tree[kNextPossibleBoardsKey]
-                                                          board:initialBoard
-                                                 whoMadeTheMove:self.botStartsTheGame ? self.botTTTSymbol : self.playerTTTSymbol];
+        // Average Score
+//        self.tree[kScoreKey] = [self scoreFromNextPossibleBoard:self.tree[kNextPossibleBoardsKey]
+//                                                          board:initialBoard
+//                                                     botDidMove:self.botStartsTheGame ? YES : NO];
+        // Minimax Score
+        self.tree[kScoreKey] = [self miniMax:self.tree[kNextPossibleBoardsKey]
+                                       board:initialBoard
+                                 botDidMove:self.botStartsTheGame ? YES : NO];
     }
     
     return self;
@@ -78,7 +83,7 @@ static NSString *const kX = @"X";
         NSMutableDictionary *eachBoard = [NSMutableDictionary dictionary];
         
         // Board: eachBoard represents a SINGLE branch from parent board.
-        NSString *symbol = [self whosMakingTheMove:depthLevel];
+        NSString *symbol = [self whoWillMove:depthLevel];
         NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
         eachBoard[kDepthKey] = depthLevel;
         eachBoard[kBoardKey] = board;
@@ -87,8 +92,15 @@ static NSString *const kX = @"X";
         // Children Boards:
         eachBoard[kNextPossibleBoardsKey] = [self nextPossibleBoardsWithBoard:board depthLevel:@(depthLevel.integerValue + 1)];
         
-        // Score
-        eachBoard[kScoreKey] = [self scoreFromNextPossibleBoard:eachBoard[kNextPossibleBoardsKey] board:board whoMadeTheMove:symbol];
+        // Average Score
+//        eachBoard[kScoreKey] = [self scoreFromNextPossibleBoard:eachBoard[kNextPossibleBoardsKey]
+//                                                          board:board
+//                                                     botDidMove:[symbol isEqualToString:self.botTTTSymbol] ? YES : NO ];
+        
+        // Minimax Score
+        eachBoard[kScoreKey] = [self miniMax:eachBoard[kNextPossibleBoardsKey]
+                                       board:board
+                                 botDidMove:[symbol isEqualToString:self.botTTTSymbol] ? YES : NO ];
         
         availableBoards[obj] = eachBoard;
     }];
@@ -97,10 +109,22 @@ static NSString *const kX = @"X";
     return availableBoards;
 }
 
-- (NSNumber *)scoreFromNextPossibleBoard:(NSDictionary *)nextPossibleBoard board:(NSDictionary *)board whoMadeTheMove:(NSString *)whoMadeTheMove{
+- (NSNumber *)miniMax:(NSDictionary *)nextPossibleBoard board:(NSDictionary *)board botDidMove:(BOOL)botDidMove {
     if (!nextPossibleBoard) {
         //Get score of the board. Return that number.
-        return [self scoreWithBoard:board whoMadeTheMove:whoMadeTheMove];
+        return [self scoreWithBoard:board botDidMove:botDidMove];
+    }
+    
+    NSNumber *score = @0;
+    
+    
+    return score;
+}
+
+- (NSNumber *)scoreFromNextPossibleBoard:(NSDictionary *)nextPossibleBoard board:(NSDictionary *)board botDidMove:(BOOL)botDidMove{
+    if (!nextPossibleBoard) {
+        //Get score of the board. Return that number.
+        return [self scoreWithBoard:board botDidMove:botDidMove];
     }
     
     //Get the average score
@@ -112,9 +136,9 @@ static NSString *const kX = @"X";
     return @(score);
 }
 
-- (NSNumber *)scoreWithBoard:(NSDictionary *)board whoMadeTheMove:(NSString *)whoMadeTheMove{
+- (NSNumber *)scoreWithBoard:(NSDictionary *)board botDidMove:(BOOL)botDidMove {
     float score = 0.f;
-    NSString *result = [self winnerWithBoard:board whoMadeTheMove:whoMadeTheMove];
+    NSString *result = [self winnerWithBoard:board botDidMove:botDidMove];
     
     if ([result isEqualToString:self.botTTTSymbol]) {
         score = 1.f;
@@ -125,14 +149,14 @@ static NSString *const kX = @"X";
     return @(score);
 }
 
-- (NSString *)winnerWithBoard:(NSDictionary *)board whoMadeTheMove:(NSString *)whoMadeTheMove{
+- (NSString *)winnerWithBoard:(NSDictionary *)board botDidMove:(BOOL)botDidMove {
     NSString *winner = nil;
     
     // If there's a winner.
     if ([self winningIndicesWithBoard:board]) {
         
         // The person who made the move wins
-        winner = [whoMadeTheMove isEqualToString:self.botTTTSymbol] ? self.botTTTSymbol : self.playerTTTSymbol;
+        winner = botDidMove ? self.botTTTSymbol : self.playerTTTSymbol;
     }
     return winner;
 }
@@ -164,7 +188,7 @@ static NSString *const kX = @"X";
     return emptyIndices;
 }
 
-- (NSString *)whosMakingTheMove:(NSNumber *)depthLevel {
+- (NSString *)whoWillMove:(NSNumber *)depthLevel {
     return [self itsBotsTurn:@(depthLevel.integerValue - 1)] ? self.botTTTSymbol : self.playerTTTSymbol;
 }
 
