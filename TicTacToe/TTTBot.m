@@ -125,8 +125,8 @@ static NSString *const kX = @"X";
 
 - (void)resetBoard {
     self.playingBoard = [self.emptyBoard mutableCopy];
-    BOOL isItBotsTurn = [self itsBotsTurn:@(9 - self.numberOfRoundsLeft)];
-    return [self winnerWithBoard:self.playingBoard botDidMove:isItBotsTurn];
+    self.treeCursor = self.tree;
+    self.numberOfRoundsLeft = 9;
 }
 
 #pragma mark - Private Methods Below This Line
