@@ -11,7 +11,10 @@
 @interface TTTBot : NSObject
 
 // Holds the current TTT board
-@property (nonatomic, strong, readonly) NSDictionary *playingBoard;
+@property (nonatomic, strong, readonly) NSMutableDictionary *playingBoard;
+
+// Returns how many rounds are left 0 - 9. If 0, then the game is finished.
+@property (nonatomic, readonly) NSInteger numberOfRoundsLeft;
 
 // Initializes bot with bot symbol as "X" and player symbol as "O" and assumes player starts the game.
 - (instancetype)init;
@@ -26,10 +29,7 @@
 - (NSInteger)playerMovedAtIndex:(NSInteger)index;
 
 // nil == no winners yet.    Player's Symbol == player wins.    Bot's Symbol == bot wins.
-- (NSString *)isThereAWinner;
-
-// Returns how many rounds are left 0 - 9. If 0, then the game is finished.
-- (NSInteger)numberOfRoundsLeft;
+- (NSString *)checkForWinner;
 
 // Resets playingBoard back to emptyBoard.
 - (void)resetBoard;

@@ -25,7 +25,7 @@ static NSString *const kX = @"X";
 @property (nonatomic, strong) NSDictionary *emptyBoard;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *playingBoard;
 @property (nonatomic, strong) NSDictionary *treeCursor;
-@property (nonatomic) NSInteger numberOfRoundsLeft;
+@property (nonatomic, readwrite) NSInteger numberOfRoundsLeft;
 @end
 
 @implementation TTTBot
@@ -79,7 +79,7 @@ static NSString *const kX = @"X";
 - (NSInteger)botMovedAtIndex {
     self.treeCursor = self.treeCursor[kNextPossibleBoardsKey];
     
-    __block NSInteger moveIndex = -99;
+    __block NSInteger moveIndex = NSIntegerMin;
     __block BOOL isFirstNumber = YES;
     [self.treeCursor enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSInteger score = [obj[kScoreKey] integerValue];
@@ -92,22 +92,20 @@ static NSString *const kX = @"X";
         }
     }];
     
+    self.numberOfRoundsLeft--;
     return moveIndex;
 }
 
 - (NSInteger)playerMovedAtIndex:(NSInteger)index {
     self.playingBoard[@(index)] = self.playerTTTSymbol;
     self.treeCursor = self.treeCursor[kNextPossibleBoardsKey][@(index)];
+    self.numberOfRoundsLeft--;
     return index;
 }
 
-- (NSString *)getWinnerOrNil {
+- (NSString *)checkForWinner {
     BOOL isItBotsTurn = [self itsBotsTurn:@(9 - self.numberOfRoundsLeft)];
     return [self winnerWithBoard:self.playingBoard botDidMove:isItBotsTurn];
-}
-
-- (NSInteger)numberOfRoundsLeft {
-    return self.numberOfRoundsLeft;
 }
 
 - (void)resetBoard {
