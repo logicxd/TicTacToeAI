@@ -89,7 +89,7 @@
     cell.buttonHit = ^(NSInteger index) {
         weakSelf.board[@(index)] = @"X";
         
-        NSInteger botPlay = [weakSelf.bot nextMoveWithBoard:weakSelf.board];
+        NSInteger botPlay = 0;
         weakSelf.board[@(botPlay)] = @"O";
         
         [weakSelf.view reloadData];
