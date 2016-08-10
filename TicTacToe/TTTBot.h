@@ -11,7 +11,7 @@
 @interface TTTBot : NSObject
 
 // Holds the current TTT board
-@property (nonatomic, strong) NSMutableDictionary *playingBoard;
+@property (nonatomic, strong, readonly) NSMutableDictionary *playingBoard;
 
 // Returns how many rounds are left 0 - 9. If 0, then the game is finished.
 @property (nonatomic, readonly) NSInteger numberOfRoundsLeft;

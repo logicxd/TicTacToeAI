@@ -23,7 +23,7 @@ static NSString *const kX = @"X";
 @property (nonatomic) BOOL botStartsTheGame;
 
 @property (nonatomic, strong) NSDictionary *emptyBoard;
-//@property (nonatomic, strong) NSMutableDictionary *playingBoard;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *playingBoard;
 @property (nonatomic, strong) NSDictionary *treeCursor;
 @property (nonatomic, readwrite) NSInteger numberOfRoundsLeft;
 @end
@@ -125,8 +125,8 @@ static NSString *const kX = @"X";
 
 - (void)resetBoard {
     self.playingBoard = [self.emptyBoard mutableCopy];
-    self.treeCursor = self.tree;
-    self.numberOfRoundsLeft = 9;
+    BOOL isItBotsTurn = [self itsBotsTurn:@(9 - self.numberOfRoundsLeft)];
+    return [self winnerWithBoard:self.playingBoard botDidMove:isItBotsTurn];
 }
 
 #pragma mark - Private Methods Below This Line
