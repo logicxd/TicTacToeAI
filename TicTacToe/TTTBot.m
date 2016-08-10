@@ -109,17 +109,76 @@ static NSString *const kX = @"X";
     return availableBoards;
 }
 
+#pragma mark - miniMax
+
 - (NSNumber *)miniMax:(NSDictionary *)nextPossibleBoard board:(NSDictionary *)board botDidMove:(BOOL)botDidMove {
     if (!nextPossibleBoard) {
         //Get score of the board. Return that number.
         return [self scoreWithBoard:board botDidMove:botDidMove];
     }
     
-    NSNumber *score = @0;
-    
+    NSNumber *score;
+    if (botDidMove) {
+        score = [self minScoreFromNextPossibleBoard:nextPossibleBoard];
+    } else {
+        score = [self maxScoreFromNextPossibleBoard:nextPossibleBoard];
+    }
     
     return score;
 }
+
+- (NSNumber *)maxScoreFromNextPossibleBoard:(NSDictionary *)nextPossibleBoard {
+    // Returns: -1, 0, 1 if there are valid elements. -99 if there's no objects in element.
+    
+//    if (!nextPossibleBoard) {
+//        return nil;
+//    }
+    
+    if ([nextPossibleBoard count] == 0) {
+        NSLog(@"nextPossibleBoard objects with no element at line: %d", __LINE__);
+    }
+    
+    __block NSInteger maximumScore = -99;
+    __block BOOL isFirstNumber = YES;
+    
+    [nextPossibleBoard enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSInteger score = [obj[kScoreKey] integerValue];
+        if (isFirstNumber) {
+            maximumScore = score;
+            isFirstNumber = NO;
+        } else if (maximumScore < score) {
+            maximumScore = score;
+        }
+    }];
+    
+    return @(maximumScore);
+}
+
+- (NSNumber *)minScoreFromNextPossibleBoard:(NSDictionary *)nextPossibleBoard {
+    // Precondition: nextPossibleBoard != nil
+    // Returns: -1, 0, 1 if there are valid elements. 99 if there's no objects in element.
+    
+    if ([nextPossibleBoard count] == 0) {
+        NSLog(@"nextPossibleBoard objects with no element at line: %d", __LINE__);
+    }
+    
+    __block NSInteger minimumScore = 99;
+    __block BOOL isFirstNumber = YES;
+    
+    [nextPossibleBoard enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSInteger score = [obj[kScoreKey] integerValue];
+        if (isFirstNumber) {
+            minimumScore = score;
+            isFirstNumber = NO;
+        } else if (minimumScore > score) {
+            minimumScore = score;
+        }
+    }];
+    
+    return @(minimumScore);
+}
+
+#pragma mark - Average Score
 
 - (NSNumber *)scoreFromNextPossibleBoard:(NSDictionary *)nextPossibleBoard board:(NSDictionary *)board botDidMove:(BOOL)botDidMove{
     if (!nextPossibleBoard) {
@@ -137,11 +196,11 @@ static NSString *const kX = @"X";
 }
 
 - (NSNumber *)scoreWithBoard:(NSDictionary *)board botDidMove:(BOOL)botDidMove {
-    float score = 0.f;
+    NSInteger score = 0;
     NSString *result = [self winnerWithBoard:board botDidMove:botDidMove];
     
     if ([result isEqualToString:self.botTTTSymbol]) {
-        score = 1.f;
+        score = 1;
     } else if ([result isEqualToString:self.playerTTTSymbol]) {
         score = -1;
     }
@@ -262,49 +321,6 @@ static NSString *const kX = @"X";
     return arc4random_uniform(8);
 }
 
-- (NSNumber *)maxScoreFromFirstGenerationChildren:(NSDictionary *)possibleBoards {
-    if ([possibleBoards[kNextPossibleBoardsKey] isKindOfClass:[NSNull class]]) {
-        return possibleBoards[kScoreKey];
-    }
-    
-    //Scores are either -1, 0, or 1. Lowest is -1.
-    float firstBiggestScore;
-    NSArray *nextPossibleMoves = possibleBoards[kNextPossibleBoardsKey];
-    
-    for (int index = 0; index < [nextPossibleMoves count]; index++) {
-        NSDictionary *eachPossibleMove = nextPossibleMoves[index];
-        
-        if (index == 0) {
-            firstBiggestScore = [eachPossibleMove[kScoreKey] floatValue];
-        } else if (firstBiggestScore > [eachPossibleMove[kScoreKey] floatValue]){
-            firstBiggestScore = [eachPossibleMove[kScoreKey] floatValue];
-        }
-    }
-    
-    return @(firstBiggestScore);
-}
-
-- (NSNumber *)minScoreFromFirstGenerationChildren:(NSDictionary *)possibleBoards {
-    if ([possibleBoards[kNextPossibleBoardsKey] isKindOfClass:[NSNull class]]) {
-        return possibleBoards[kScoreKey];
-    }
-    
-    //Scores are either -1, 0, or 1. Biggest is 1.
-    float firstSmallestScore;
-    NSArray *nextPossibleMoves = possibleBoards[kNextPossibleBoardsKey];
-    
-    for (int index = 0; index < [nextPossibleMoves count]; index++) {
-        NSDictionary *eachPossibleMove = nextPossibleMoves[index];
-        
-        if (index == 0) {
-            firstSmallestScore = [eachPossibleMove[kScoreKey] floatValue];
-        } else if (firstSmallestScore < [eachPossibleMove[kScoreKey] floatValue]){
-            firstSmallestScore = [eachPossibleMove[kScoreKey] floatValue];
-        }
-    }
-    
-    return @(firstSmallestScore);
-}
 
 @end
 
