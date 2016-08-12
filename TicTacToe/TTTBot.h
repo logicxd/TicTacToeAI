@@ -10,29 +10,27 @@
 
 @interface TTTBot : NSObject
 
-// Holds the current TTT board
-@property (nonatomic, strong, readonly) NSMutableDictionary *playingBoard;
+#pragma mark - Properties
 
-// Returns how many rounds are left 0 - 9. If 0, then the game is finished.
-@property (nonatomic, readonly) NSInteger numberOfRoundsLeft;
+@property (nonatomic, strong, readonly) NSMutableDictionary *playingBoard;  // Holds current TTT board
+@property (nonatomic, readonly) NSInteger numberOfRoundsLeft;               // Returns 0 - 9. Game's completed at round 0.
+@property (nonatomic, strong) NSString *botSymbol;                          // Bot's character symbol.
+@property (nonatomic, strong) NSString *playerSymbol;                       // Player's character symbol.
+@property (nonatomic) BOOL botStartsTheGame;                                // YES if bot starts the game. NO otherwise. 
 
-// Initializes bot with bot symbol as "X" and player symbol as "O" and assumes player starts the game.
-- (instancetype)init;
+#pragma mark - Inits
 
-// Initializes bot with given bot symbol and player symbol.
-- (instancetype)initWithBotTTTSymbol:(NSString *)botSymbol playerTTTSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame NS_DESIGNATED_INITIALIZER;
+- (instancetype)init;   // Player is "X" and the Bot is "O". Player starts the game.
+- (instancetype)initWithBotSymbol:(NSString *)botSymbol playerSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame NS_DESIGNATED_INITIALIZER;
 
-// Bot makes a move and returns the index where it marked.
-- (NSInteger)botMovedAtIndex;
+#pragma mark - Interaction with bot
 
-// Player passes in the index where it marked, and returns the same index.
-- (NSInteger)playerMovedAtIndex:(NSInteger)index;
-
-// nil == no winners yet.    Player's Symbol == player wins.    Bot's Symbol == bot wins.
-- (NSString *)checkForWinner;
-
-// Resets playingBoard back to emptyBoard.
-- (void)resetBoard;
+- (NSInteger)botMovedAtIndex;                                   // Bot makes a move and returns the index where it marked. Returns -1 if invalid.
+- (NSInteger)botMovedAtIndexWithPlayerMove:(NSInteger)index;    // Player makes a move at index, and then the bot moves. Returns -1 if invalid.
+- (NSInteger)playerMovedAtIndex:(NSInteger)index;               // Player passes in the index where it marked. Returns -1 if invalid.
+- (BOOL)botsTurnInGame;                                               // Returns true if it's bot's turn.
+- (NSString *)checkForWinner;                                   // Returns the winner's symbol if a winner is determined. Nil otherwise.
+- (void)restartGame;                                            // Restarts the game.
 
 @end
 

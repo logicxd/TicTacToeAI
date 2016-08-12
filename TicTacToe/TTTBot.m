@@ -17,15 +17,11 @@ static NSString *const kO = @"O";
 static NSString *const kX = @"X";
 
 @interface TTTBot()
+@property (nonatomic, strong) const NSDictionary *emptyBoard;
 @property (nonatomic, strong) NSMutableDictionary *tree;
-@property (nonatomic, strong) NSString *botTTTSymbol;
-@property (nonatomic, strong) NSString *playerTTTSymbol;
-@property (nonatomic) BOOL botStartsTheGame;
-
-@property (nonatomic, strong) NSDictionary *emptyBoard;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *playingBoard;
-@property (nonatomic, strong) NSDictionary *treeCursor;
 @property (nonatomic, readwrite) NSInteger numberOfRoundsLeft;
+@property (nonatomic, strong) NSDictionary *currentTreePointer;
 @end
 
 @implementation TTTBot
@@ -33,15 +29,15 @@ static NSString *const kX = @"X";
 #pragma mark - Visible Methods
 
 - (instancetype)init {
-    return [self initWithBotTTTSymbol:kX playerTTTSymbol:kO botStartsTheGame:NO];
+    return [self initWithBotSymbol:kX playerSymbol:kO botStartsTheGame:NO];
 }
 
-- (instancetype)initWithBotTTTSymbol:(NSString *)botSymbol playerTTTSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame {
+- (instancetype)initWithBotSymbol:(NSString *)botSymbol playerSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame {
     self = [super init];
     if (self) {
         self.tree = [NSMutableDictionary dictionary];
-        self.botTTTSymbol = botSymbol;
-        self.playerTTTSymbol = playerSymbol;
+        self.botSymbol = botSymbol;
+        self.playerSymbol = playerSymbol;
         self.botStartsTheGame = botStartsTheGame;
         
         self.emptyBoard = @{
@@ -55,8 +51,8 @@ static NSString *const kX = @"X";
                             @7 : @7,
                             @8 : @8,
                             };
-        self.playingBoard = [self.emptyBoard mutableCopy];
-        self.treeCursor = self.tree;
+        self.playingBoard = [NSMutableDictionary dictionaryWithCapacity:9];
+        self.currentTreePointer = self.tree;
         self.numberOfRoundsLeft = 9;
         
         self.tree[kDepthKey] = @0;
@@ -77,55 +73,92 @@ static NSString *const kX = @"X";
 }
 
 - (NSInteger)botMovedAtIndex {
-    self.treeCursor = self.treeCursor[kNextPossibleBoardsKey];
-    
+    // Get the highest possible score for bot.
+    NSDictionary *temporaryPointer = self.currentTreePointer[kNextPossibleBoardsKey];
     __block NSInteger biggestScore = NSIntegerMin;    
-    __block NSDictionary *dictionary = nil;
-    __block NSMutableArray *bestMoves = [NSMutableArray array];
-    [self.treeCursor enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSInteger score = [obj[kScoreKey] integerValue];
+    __block BOOL setScore = NO;
+    [temporaryPointer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull board, BOOL * _Nonnull stop) {
+        NSInteger score = [board[kScoreKey] integerValue];
         
-        if (biggestScore < score || !dictionary) {
+        if (biggestScore < score || !setScore) {
             biggestScore = score;
-            dictionary = obj;
+            setScore = YES;
         }
     }];
-    [self.treeCursor enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSInteger score = [obj[kScoreKey] integerValue];
+    
+    // Randomize all the possible moves for the highest score.
+    __block NSMutableArray *bestMoves = [NSMutableArray arrayWithCapacity:9];
+    [temporaryPointer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull board, BOOL * _Nonnull stop) {
+        NSInteger score = [board[kScoreKey] integerValue];
 
         if (biggestScore == score) {
-            [bestMoves addObject:obj];
+            [bestMoves addObject:board];
         }
     }];
     
-    NSDictionary *randomMove = bestMoves[arc4random_uniform(bestMoves.count - 1)];
+    // There must be at least one move and it must be bot's turn.
+    if (bestMoves.count == 0 || [self botsTurnWithDepthLevel:@(9 - self.numberOfRoundsLeft + 1)]) {
+        return -1;
+    }
     
+    // Get a random move
+    NSDictionary *randomMove = bestMoves[arc4random_uniform(bestMoves.count)];
     NSInteger moveIndex = [randomMove[kPositionIndex] integerValue];
-    self.treeCursor = self.treeCursor[@(moveIndex)];
-    self.playingBoard[@(moveIndex)] = self.botTTTSymbol;
+    
+    // Make the move
+    self.currentTreePointer = self.currentTreePointer[kNextPossibleBoardsKey][@(moveIndex)];
+    self.playingBoard[@(moveIndex)] = self.botSymbol;
     self.numberOfRoundsLeft--;
     return moveIndex;
 }
 
+- (NSInteger)botMovedAtIndexWithPlayerMove:(NSInteger)index {
+    NSInteger moveIndex = [self playerMovedAtIndex:index];
+    if (moveIndex != -1) {
+        moveIndex = [self botMovedAtIndex];
+    }
+    return moveIndex;
+}
+
 - (NSInteger)playerMovedAtIndex:(NSInteger)index {
-    self.treeCursor = self.treeCursor[kNextPossibleBoardsKey][@(index)];
-    self.playingBoard[@(index)] = self.playerTTTSymbol;
+    if (!self.currentTreePointer[kNextPossibleBoardsKey][@(index)]) {
+        return -1;
+    }
+    
+    self.currentTreePointer = self.currentTreePointer[kNextPossibleBoardsKey][@(index)];
+    self.playingBoard[@(index)] = self.playerSymbol;
     self.numberOfRoundsLeft--;
     return index;
 }
 
+- (BOOL)botsTurnInGame {
+    BOOL botsTurn = NO;
+    
+    if (self.botStartsTheGame) {
+        botsTurn = self.numberOfRoundsLeft % 2 == 1 ? YES : NO;
+    } else {
+        botsTurn = self.numberOfRoundsLeft % 2 == 0 ? YES : NO;
+    }
+    return botsTurn;
+}
+
 - (NSString *)checkForWinner {
-    BOOL isItBotsTurn = [self itsBotsTurn:@(9 - self.numberOfRoundsLeft + 1)];
-    NSString *winner = [self winnerWithBoard:self.playingBoard botDidMove:isItBotsTurn];
+    __block NSMutableDictionary *board = [self.emptyBoard mutableCopy];
+    [self.playingBoard enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        board[key]= obj;
+    }];
+    
+    BOOL isItBotsTurn = [self botsTurnWithDepthLevel:@(9 - self.numberOfRoundsLeft + 1)];
+    NSString *winner = [self winnerWithBoard:board botDidMove:isItBotsTurn];
     if (winner) {
         self.numberOfRoundsLeft = 0;
     }
     return winner;
 }
 
-- (void)resetBoard {
-    self.playingBoard = [self.emptyBoard mutableCopy];
-    self.treeCursor = self.tree;
+- (void)restartGame {
+    self.playingBoard = [NSMutableDictionary dictionaryWithCapacity:9];
+    self.currentTreePointer = self.tree;
     self.numberOfRoundsLeft = 9;
 }
 
@@ -159,7 +192,7 @@ static NSString *const kX = @"X";
         // Minimax Score
         eachBoard[kScoreKey] = [self miniMax:eachBoard[kNextPossibleBoardsKey]
                                        board:board
-                                  botDidMove:[symbol isEqualToString:self.botTTTSymbol] ? YES : NO ];
+                                  botDidMove:[symbol isEqualToString:self.botSymbol] ? YES : NO ];
         
         availableBoards[obj] = eachBoard;
     }];
@@ -196,7 +229,7 @@ static NSString *const kX = @"X";
 }
 
 - (NSString *)whoWillMove:(NSNumber *)depthLevel {
-    return [self itsBotsTurn:@(depthLevel.integerValue - 1)] ? self.botTTTSymbol : self.playerTTTSymbol;
+    return [self botsTurnWithDepthLevel:@(depthLevel.integerValue - 1)] ? self.botSymbol : self.playerSymbol;
 }
 
 - (NSDictionary *)markBoard:(NSDictionary *)board positionIndex:(NSNumber *)positionIndex symbol:(NSString *)symbol {
@@ -291,9 +324,9 @@ static NSString *const kX = @"X";
     NSInteger score = 0;
     NSString *result = [self winnerWithBoard:board botDidMove:botDidMove];
     
-    if ([result isEqualToString:self.botTTTSymbol]) {
+    if ([result isEqualToString:self.botSymbol]) {
         score = 1;
-    } else if ([result isEqualToString:self.playerTTTSymbol]) {
+    } else if ([result isEqualToString:self.playerSymbol]) {
         score = -1;
     }
     
@@ -307,14 +340,14 @@ static NSString *const kX = @"X";
     if ([self winningIndicesWithBoard:board]) {
         
         // The person who made the move wins
-        winner = botDidMove ? self.botTTTSymbol : self.playerTTTSymbol;
+        winner = botDidMove ? self.botSymbol : self.playerSymbol;
     }
     return winner;
 }
 
 #pragma mark - Helper Methods
 
-- (BOOL) itsBotsTurn:(NSNumber *)depthLevel {
+- (BOOL) botsTurnWithDepthLevel:(NSNumber *)depthLevel {
     BOOL isItBotsTurn = NO;
     
     //Even

@@ -36,7 +36,7 @@
     
     NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
     [backgroundQueue addOperationWithBlock:^{
-        TTTBot *bot = [[TTTBot alloc] initWithBotTTTSymbol:@"X" playerTTTSymbol:@"O" botStartsTheGame:NO];
+        TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.view.userInteractionEnabled = YES;
             self.bot = bot;
@@ -88,36 +88,37 @@
     return 120;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 120;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     __weak typeof(self) weakSelf = self;
     
     TTTCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TTTCell" forIndexPath:indexPath];
     cell.rowIndex = indexPath.row;
-    cell.buttonHit = ^(NSInteger index) {
-        
-        // Assuming player starts first --> Players turn on Even Rounds
-        
+    if (self.bot.botStartsTheGame && self.bot.numberOfRoundsLeft == 9) {
+        [self.bot botMovedAtIndex];
+    }
+    cell.buttonHit = ^(NSInteger index)
+    {
         if ([weakSelf.bot numberOfRoundsLeft] > 0) {
-            
-            if ([weakSelf.bot numberOfRoundsLeft] % 2 == 0) {
+            if ([weakSelf.bot botsTurnInGame]) {
+                // Bot's turn
                 NSInteger indexOfBotsMove = [weakSelf.bot botMovedAtIndex];
-//                weakSelf.bot.playingBoard[@(indexOfBotsMove)] = @"X";
                 NSLog(@"Bot moved at index: %i", indexOfBotsMove);
-                
             } else {
-                NSInteger indexOfPlayersMove = [weakSelf.bot playerMovedAtIndex:index];
-//                weakSelf.bot.playingBoard[@(indexOfPlayersMove)] = @"O";
-                NSLog(@"Player moved at index: %i", indexOfPlayersMove);
-                
-                if ([weakSelf.bot numberOfRoundsLeft] > 0 && [weakSelf.bot checkForWinner] == nil) {
-                    NSInteger indexOfBotsMove = [weakSelf.bot botMovedAtIndex];
-//                    weakSelf.bot.playingBoard[@(indexOfBotsMove)] = @"X";
-                    NSLog(@"Bot moved at index: %i", indexOfBotsMove);
-                }
+                // Player's turn
+                NSInteger indexOfBotsMove = [weakSelf.bot botMovedAtIndexWithPlayerMove:index];
+                NSLog(@"Player moved at index: %i", index);
+                NSLog(@"Bot moved at index: %i", indexOfBotsMove);
             }
+            
             NSLog(@"Number of Rounds Left: %i", [weakSelf.bot numberOfRoundsLeft]);
+            
         } else {
-            [weakSelf.bot resetBoard];
+            // numberOfRoundsLeft == 0
+            [weakSelf.bot restartGame];
         }
         
         NSString *winner = [weakSelf.bot checkForWinner];
@@ -136,56 +137,11 @@
         cell.showsBottomLine = YES;
     }
     
-    if (!self.bot) {
-//        [cell.leftButton setTitle:self.board[@(0 + indexPath.row * 3)] forState:UIControlStateNormal];
-//        [cell.centerButton setTitle:self.board[@(1 + indexPath.row * 3)] forState:UIControlStateNormal];
-//        [cell.rightButton setTitle:self.board[@(2 + indexPath.row * 3)] forState:UIControlStateNormal];
-    } else {
-        NSNumber *index0 = @(0 + indexPath.row * 3);
-        NSNumber *index1 = @(1 + indexPath.row * 3);
-        NSNumber *index2 = @(2 + indexPath.row * 3);
-        
-        NSString *title0, *title1, *title2;
-        
-        if ([self.bot.playingBoard[index0] isKindOfClass:[NSNumber class]]) {
-            title0 = [self.bot.playingBoard[index0] stringValue];
-        } else {
-            title0 = self.bot.playingBoard[index0];
-        }
-        
-        if ([self.bot.playingBoard[index1] isKindOfClass:[NSNumber class]]) {
-            title1 = [self.bot.playingBoard[index1] stringValue];
-        } else {
-            title1 = self.bot.playingBoard[index1];
-        }
-        
-        if ([self.bot.playingBoard[index2] isKindOfClass:[NSNumber class]]) {
-            title2 = [self.bot.playingBoard[index2] stringValue];
-        } else {
-            title2 = self.bot.playingBoard[index2];
-        }
-        
-        if ([title0 isEqualToString:@"X"] || [title0 isEqualToString:@"O"]) {
-            [cell.leftButton setTitle:title0 forState:UIControlStateNormal];
-        } else {
-            [cell.leftButton setTitle:@"" forState:UIControlStateNormal];
-        }
-        if ([title1 isEqualToString:@"X"] || [title1 isEqualToString:@"O"]) {
-            [cell.centerButton setTitle:title1 forState:UIControlStateNormal];
-        } else {
-            [cell.centerButton setTitle:@"" forState:UIControlStateNormal];
-        }
-        if ([title2 isEqualToString:@"X"] || [title2 isEqualToString:@"O"]) {
-            [cell.rightButton setTitle:title2 forState:UIControlStateNormal];
-        } else {
-            [cell.rightButton setTitle:@"" forState:UIControlStateNormal];
-        }
-    }
+    [cell.leftButton setTitle:self.bot.playingBoard[@(0 + indexPath.row * 3)] forState:UIControlStateNormal];
+    [cell.centerButton setTitle:self.bot.playingBoard[@(1 + indexPath.row * 3)] forState:UIControlStateNormal];
+    [cell.rightButton setTitle:self.bot.playingBoard[@(2 + indexPath.row * 3)] forState:UIControlStateNormal];
+    
     return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 120;
 }
 
 @end
