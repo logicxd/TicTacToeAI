@@ -5,6 +5,11 @@
 //  Created by Aung Moe on 8/2/16.
 //  Copyright © 2016 Alaric Gonzales. All rights reserved.
 //
+//  Number of boards: 549,945. No alpha-beta pruning. Stops once a winner is found.
+//  Time elasped (in seconds): 9.668, 9.819, 9.435
+//
+//
+//
 
 #import "TTTBot.h"
 
@@ -15,6 +20,7 @@ static NSString *const kDepthKey = @"kDepthKey";
 static NSString *const kPositionIndex = @"kPositionIndex";
 static NSString *const kO = @"O";
 static NSString *const kX = @"X";
+static NSInteger count = 0;
 
 @interface TTTBot()
 @property (nonatomic, strong) const NSDictionary *emptyBoard;
@@ -35,6 +41,7 @@ static NSString *const kX = @"X";
 - (instancetype)initWithBotSymbol:(NSString *)botSymbol playerSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame {
     self = [super init];
     if (self) {
+        NSLog(@"Bot is loading...");
         self.tree = [NSMutableDictionary dictionary];
         self.botSymbol = botSymbol;
         self.playerSymbol = playerSymbol;
@@ -68,7 +75,7 @@ static NSString *const kX = @"X";
                                        board:[self.emptyBoard copy]
                                   botDidMove:self.botStartsTheGame ? YES : NO];
     }
-    
+    NSLog(@"Bot finished loading...");
     return self;
 }
 
@@ -195,6 +202,8 @@ static NSString *const kX = @"X";
                                   botDidMove:[symbol isEqualToString:self.botSymbol] ? YES : NO ];
         
         availableBoards[obj] = eachBoard;
+        
+        count++;
     }];
     
     // availableBoards == eachBoard[kNextPossibleBoardsKey]
