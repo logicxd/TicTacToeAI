@@ -16,7 +16,8 @@
 @property (nonatomic, strong) UITableView *view;
 @property (nonatomic) NSInteger nextTurn;
 @property (nonatomic, strong) TTTBot *bot;
-//@property (nonatomic, strong, readonly) UISwitch *switchButton;
+
+
 @end
 
 @implementation TicTacToeTableViewController
@@ -30,7 +31,8 @@
     
     [self.view registerClass:[TTTCell class] forCellReuseIdentifier:@"TTTCell"];
     [self.view registerClass:[TTTInformationCell class] forCellReuseIdentifier:@"TTTInformationCell"];
-
+    
+    
 }
 
 - (void)viewDidLoad {
@@ -87,6 +89,7 @@
     }
     cell.buttonHit = ^(NSInteger index)
     {
+        self.view.userInteractionEnabled = NO;
         if ([weakSelf.bot numberOfRoundsLeft] > 0) {
             if ([weakSelf.bot botsTurnInGame]) {
                 // Bot's turn
@@ -113,7 +116,19 @@
             NSLog(@"Game is a tie");
         }
         
-        [weakSelf.view reloadData];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:0 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationNone];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:1 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationNone];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:2 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationNone];
+        self.view.userInteractionEnabled = YES;
     };
     
     if (indexPath.row == 2) {
@@ -129,58 +144,86 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 90;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     __weak typeof(self) weakSelf = self;
-  TTTInformationCell *footerCell = [tableView dequeueReusableCellWithIdentifier:@"TTTInformationCell"];
     
+    TTTInformationCell *footerCell = [tableView dequeueReusableCellWithIdentifier:@"TTTInformationCell"];
+    __block __weak typeof(TTTInformationCell) *weakFooterCell = footerCell;
+
     footerCell.pressedResetButton = ^(){
+        weakSelf.view.userInteractionEnabled = NO;
         [weakSelf.bot restartGame];
-        [weakSelf.view reloadData];
-//        [weakSelf.view reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-//        weakSelf.view reloadRowsAtIndexPaths:[NSArray 0,1,2] withRowAnimation:UITableViewRowAnimationNone];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:0 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationLeft];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:1 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationRight];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:2 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationLeft];
+
+        weakSelf.view.userInteractionEnabled = YES;
     };
     
     footerCell.pressedPlayerStartButton = ^(){
+        weakSelf.view.userInteractionEnabled = NO;
+        [weakFooterCell.indicator startAnimating];
+        
         TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:NO];
-        NSLog(@"Loading...");
-        self.bot = bot;
+        weakSelf.bot = bot;
         [weakSelf.bot restartGame];
-        [weakSelf.view reloadData];
-        NSLog(@"Ready!");
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:0 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationLeft];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:1 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationRight];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:2 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationLeft];
+        
+//        [weakFooterCell.indicator stopAnimating];
+        weakSelf.view.userInteractionEnabled = YES;
     };
     
     footerCell.pressedBotStartButton = ^(){
+        weakSelf.view.userInteractionEnabled = NO;
+        [weakFooterCell.indicator startAnimating];
+        
         TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
-        NSLog(@"Loading...");
-        self.bot = bot;
+        weakSelf.bot = bot;
         [weakSelf.bot restartGame];
-        [weakSelf.view reloadData];
-        NSLog(@"Ready!");
-    };
-//    footerCell.pressedSwitchButton = ^(UISwitch *buttonSwitch){
-//        if ([buttonSwitch isOn]){
-//            NSLog(@"Button Switch ON");
-//            TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
-//            self.bot = bot;
-//        } else {
-//            NSLog(@"Button Switch OFF");
-//            TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:NO];
-//            self.bot = bot;
-//        }
-//        [weakSelf.view reloadData];
-//        
-//    };
-//    
-//    if (weakSelf.bot.botStartsTheGame == YES) {
-//        NSLog(@"BOT Starts the game");
-//    } else if (weakSelf.bot.botStartsTheGame == NO){
-//        NSLog(@"PLAYER Starts the game");
-//    }
-    return footerCell;
-}
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:0 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationRight];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:1 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationLeft];
+        [weakSelf.view reloadRowsAtIndexPaths:@[
+                                                [NSIndexPath indexPathForRow:2 inSection:0]
+                                                ]
+                             withRowAnimation:UITableViewRowAnimationRight];
+        
+//        [weakFooterCell.indicator stopAnimating];
+        weakSelf.view.userInteractionEnabled = YES;
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 90;
+    };
+    
+    
+    return footerCell;
 }
 
 

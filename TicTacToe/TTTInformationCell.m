@@ -45,14 +45,24 @@
         [self.contentView addSubview:self.gameStatus];
         
         _resetButton = [[UIButton alloc] init];
-        self.resetButton.titleLabel.font = [UIFont fontWithName:@"Didot-Bold" size:14.0];
+        self.resetButton.titleLabel.font = [UIFont fontWithName:@"Chalkduster" size:14.0];
         self.resetButton.backgroundColor = [UIColor redColor];
         [self.resetButton setTitle:@"RESET" forState:UIControlStateNormal];
     
         [self.resetButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.resetButton addTarget:self action:@selector(pressedResetButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.resetButton];
-
+        
+        self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.indicator.color = [UIColor blackColor];
+        self.indicator.hidesWhenStopped = YES;
+        [self.contentView addSubview:self.indicator];
+        
+//        self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+//        self.progressView.progressTintColor = [UIColor magentaColor];
+//        self.progressView.progress = 0.75f;
+//        [self.contentView addSubview:self.progressView];
+        
         [self setBackgroundColor:[UIColor clearColor]];
     }
     return self;
@@ -95,37 +105,47 @@
     }];
     
     [self.gameStatus mas_remakeConstraints:^(MASConstraintMaker *make) {
-        
+    
     }];
+    
+    [self.indicator mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.resetButton.mas_top);
+        make.centerX.equalTo(self.contentView.mas_centerX);
+        make.centerY.equalTo(self.contentView.mas_centerY);
+        make.width.equalTo(self.resetButton.mas_width);
+    }];
+
+//    [self.progressView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.resetButton.mas_top).offset(-5);
+//        make.centerX.equalTo(self.contentView.mas_centerX);
+//        make.height.equalTo(@20);
+//        make.width.equalTo(self.resetButton.mas_width);
+//    }];
     
     [super updateConstraints];
 }
 
 - (void)pressedResetButton:(UIButton *)button {
     if (button == self.resetButton) {
-        NSLog(@"Game has reset!");
         self.pressedResetButton();
     }
-
 }
 
 - (void)pressedPlayerStartButton:(UIButton *)button {
     if (button == self.playerStartButton){
-            NSLog(@"Player starts next!");
-            [self.playerStartButton setBackgroundColor:[UIColor yellowColor]];
-            [self.botStartButton setBackgroundColor:[UIColor clearColor]];
+        [self.playerStartButton setBackgroundColor:[UIColor yellowColor]];
+        [self.botStartButton setBackgroundColor:[UIColor clearColor]];
     }
     self.pressedPlayerStartButton();
 }
 
 - (void)pressedBotStartButton:(UIButton *)button {
     if (button == self.botStartButton){
-        NSLog(@"Bot starts next!");
         [self.botStartButton setBackgroundColor:[UIColor yellowColor]];
         [self.playerStartButton setBackgroundColor:[UIColor clearColor]];
     }
     self.pressedBotStartButton();
-}
 
+}
 
 @end

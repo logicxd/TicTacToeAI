@@ -51,11 +51,7 @@
         self.bottomLine = [[UIView alloc] init];
         self.bottomLine.backgroundColor = [UIColor blackColor];
         [self.contentView addSubview:self.bottomLine];
-        
-//        _switchButton = [[UISwitch alloc] init];
-//        [self.switchButton addTarget:self action:@selector(switchPress:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
+    
         self.contentView.backgroundColor = [UIColor clearColor];
         
     }
