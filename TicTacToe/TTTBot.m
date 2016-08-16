@@ -5,6 +5,13 @@
 //  Created by Aung Moe on 8/2/16.
 //  Copyright © 2016 Alaric Gonzales. All rights reserved.
 //
+//  Number of boards: 549,945. No alpha-beta pruning. Stops once a winner is found.
+//  Time elasped (in seconds): 9.668, 9.819, 9.435
+//
+//  Number of boards on the first round: 85,088. With alpha-beta pruning.
+//  2nd round: 88,383.
+//  3rd round: 88,556.
+//  4th round: 88,564.
 
 #import "TTTBot.h"
 
@@ -15,13 +22,12 @@ static NSString *const kDepthKey = @"kDepthKey";
 static NSString *const kPositionIndex = @"kPositionIndex";
 static NSString *const kO = @"O";
 static NSString *const kX = @"X";
+static NSInteger count = 0;
 
 @interface TTTBot()
 @property (nonatomic, strong) const NSDictionary *emptyBoard;
-@property (nonatomic, strong) NSMutableDictionary *tree;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *playingBoard;
 @property (nonatomic, readwrite) NSInteger numberOfRoundsLeft;
-@property (nonatomic, strong) NSDictionary *currentTreePointer;
 @end
 
 @implementation TTTBot
@@ -35,7 +41,7 @@ static NSString *const kX = @"X";
 - (instancetype)initWithBotSymbol:(NSString *)botSymbol playerSymbol:(NSString *)playerSymbol botStartsTheGame:(BOOL)botStartsTheGame {
     self = [super init];
     if (self) {
-        self.tree = [NSMutableDictionary dictionary];
+//        NSLog(@"Bot is loading...");
         self.botSymbol = botSymbol;
         self.playerSymbol = playerSymbol;
         self.botStartsTheGame = botStartsTheGame;
@@ -52,34 +58,34 @@ static NSString *const kX = @"X";
                             @8 : @8,
                             };
         self.playingBoard = [NSMutableDictionary dictionaryWithCapacity:9];
-        self.currentTreePointer = self.tree;
         self.numberOfRoundsLeft = 9;
-        
-        self.tree[kDepthKey] = @0;
-        self.tree[kBoardKey] = [self.emptyBoard copy];
-        self.tree[kPositionIndex] = nil;
-        self.tree[kNextPossibleBoardsKey] = [self nextPossibleBoardsWithBoard:[self.emptyBoard copy] depthLevel:@1];
-        // Average Score
-        //        self.tree[kScoreKey] = [self scoreFromNextPossibleBoard:self.tree[kNextPossibleBoardsKey]
-        //                                                          board:initialBoard
-        //                                                     botDidMove:self.botStartsTheGame ? YES : NO];
-        // Minimax Score
-        self.tree[kScoreKey] = [self miniMax:self.tree[kNextPossibleBoardsKey]
-                                       board:[self.emptyBoard copy]
-                                  botDidMove:self.botStartsTheGame ? YES : NO];
     }
-    
+//    NSLog(@"Bot finished loading...");
     return self;
 }
 
 - (NSInteger)botMovedAtIndex {
-    // Get the highest possible score for bot.
-    NSDictionary *temporaryPointer = self.currentTreePointer[kNextPossibleBoardsKey];
-    __block NSInteger biggestScore = NSIntegerMin;    
-    __block BOOL setScore = NO;
-    [temporaryPointer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull board, BOOL * _Nonnull stop) {
-        NSInteger score = [board[kScoreKey] integerValue];
+    // Fill the board with the values that should be in.
+    __block NSMutableDictionary *filledBoard = [self.emptyBoard mutableCopy];
+    [self.playingBoard enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        filledBoard[key]= obj;
+    }];
+    
+    // Load alpha-beta scores.
+    NSMutableDictionary *availableMoves = [NSMutableDictionary dictionary];
+    NSDictionary *emptyPositions = [self emptyPositionsWithBoard:filledBoard];
+    [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull positionIndex, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSDictionary *board = [self markBoard:filledBoard positionIndex:positionIndex symbol:self.botSymbol];
+        NSNumber *score = [self alphaBetaScoreWithBoard:board alpha:@(NSIntegerMin) beta:@(NSIntegerMax) depthLevel:@(9 - self.numberOfRoundsLeft) depthToStopAtInclusively:@(9)];
         
+        availableMoves[positionIndex] = score;
+    }];
+    
+    // Get the highest possible score for bot.
+    __block NSInteger biggestScore = NSIntegerMin;
+    __block BOOL setScore = NO;
+    [availableMoves enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSInteger score = [obj integerValue];
         if (biggestScore < score || !setScore) {
             biggestScore = score;
             setScore = YES;
@@ -88,11 +94,12 @@ static NSString *const kX = @"X";
     
     // Randomize all the possible moves for the highest score.
     __block NSMutableArray *bestMoves = [NSMutableArray arrayWithCapacity:9];
-    [temporaryPointer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull board, BOOL * _Nonnull stop) {
-        NSInteger score = [board[kScoreKey] integerValue];
-
+    [availableMoves enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSInteger index = [key integerValue];
+        NSInteger score = [obj integerValue];
+        
         if (biggestScore == score) {
-            [bestMoves addObject:board];
+            [bestMoves addObject:@(index)];
         }
     }];
     
@@ -102,30 +109,35 @@ static NSString *const kX = @"X";
     }
     
     // Get a random move
-    NSDictionary *randomMove = bestMoves[arc4random_uniform(bestMoves.count)];
-    NSInteger moveIndex = [randomMove[kPositionIndex] integerValue];
+    NSInteger intKey = [bestMoves[arc4random_uniform(bestMoves.count)] integerValue];
     
     // Make the move
-    self.currentTreePointer = self.currentTreePointer[kNextPossibleBoardsKey][@(moveIndex)];
-    self.playingBoard[@(moveIndex)] = self.botSymbol;
+    self.playingBoard[@(intKey)] = self.botSymbol;
     self.numberOfRoundsLeft--;
-    return moveIndex;
+    return intKey;
 }
 
 - (NSInteger)botMovedAtIndexWithPlayerMove:(NSInteger)index {
     NSInteger moveIndex = [self playerMovedAtIndex:index];
-    if (moveIndex != -1) {
+    
+    // Fill the board with the values that should be in.
+    __block NSMutableDictionary *filledBoard = [self.emptyBoard mutableCopy];
+    
+    [self.playingBoard enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        filledBoard[key]= obj;
+    }];
+    
+    if (moveIndex != -1 && ![self gameIsCompleteWithBoard:filledBoard]) {
         moveIndex = [self botMovedAtIndex];
     }
     return moveIndex;
 }
 
 - (NSInteger)playerMovedAtIndex:(NSInteger)index {
-    if (!self.currentTreePointer[kNextPossibleBoardsKey][@(index)]) {
+    if ([self.playingBoard[@(index)] isKindOfClass:[NSString class]]) {
         return -1;
     }
     
-    self.currentTreePointer = self.currentTreePointer[kNextPossibleBoardsKey][@(index)];
     self.playingBoard[@(index)] = self.playerSymbol;
     self.numberOfRoundsLeft--;
     return index;
@@ -158,7 +170,6 @@ static NSString *const kX = @"X";
 
 - (void)restartGame {
     self.playingBoard = [NSMutableDictionary dictionaryWithCapacity:9];
-    self.currentTreePointer = self.tree;
     self.numberOfRoundsLeft = 9;
 }
 
@@ -194,6 +205,7 @@ static NSString *const kX = @"X";
                                        board:board
                                   botDidMove:[symbol isEqualToString:self.botSymbol] ? YES : NO ];
         
+        count++;
         availableBoards[obj] = eachBoard;
     }];
     
@@ -236,6 +248,69 @@ static NSString *const kX = @"X";
     NSMutableDictionary *newBoard = [board mutableCopy];
     [newBoard setObject:symbol forKey:positionIndex];
     return newBoard;
+}
+
+#pragma mark - Alpha Beta Score
+
+- (NSNumber *)alphaBetaScoreWithBoard:(NSDictionary *)parentBoard alpha:(NSNumber *)alpha beta:(NSNumber *)beta depthLevel:(NSNumber *)depthLevel depthToStopAtInclusively:(NSNumber *)depthToStopAt{
+    BOOL botWillMove = NO;
+    if ([[self whoWillMove:depthLevel] isEqualToString:[self botSymbol]]) {
+        botWillMove = YES;
+    }
+    
+    if ([self gameIsCompleteWithBoard:parentBoard] || [depthLevel isEqualToNumber:depthToStopAt]) {
+        return [self scoreWithBoard:parentBoard botDidMove:botWillMove ? NO : YES];
+    }
+    
+    __block NSNumber *score;
+    __block NSNumber *blockAlpha = alpha;
+    __block NSNumber *blockBeta = beta;
+    NSDictionary *emptyPositions = [self emptyPositionsWithBoard:parentBoard];
+    
+    // Move has been made. Now we will get the score accordingly.
+    if (botWillMove) {
+        // Bot made the move. Look for higher score.
+        [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            // Board: eachBoard represents a SINGLE branch from parent board.
+            NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
+            NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
+            score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
+            
+            // Bot made the move. Look for higher score.
+            if ([score integerValue] > [blockAlpha integerValue]) {
+                blockAlpha = score;
+            }
+            
+            if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
+                *stop = YES;
+            }
+            count++;
+        }];
+        
+        // This is the bot's best move.
+        return blockAlpha;
+    } else {
+        // Player made the move. Look for the worse scorer that player can get us.
+        [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            // Board: eachBoard represents a SINGLE branch from parent board.
+            NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
+            NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
+            score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
+            
+            // Player made the move. Look for the worse scorer that player can get us.
+            if ([score integerValue] < [blockBeta integerValue]) {
+                blockBeta = score;
+            }
+            
+            if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
+                *stop = YES;
+            }
+            count++;
+        }];
+        
+        // This is the player's worst move.
+        return blockBeta;
+    }
 }
 
 #pragma mark - miniMax Score
