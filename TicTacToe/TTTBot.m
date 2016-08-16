@@ -8,8 +8,10 @@
 //  Number of boards: 549,945. No alpha-beta pruning. Stops once a winner is found.
 //  Time elasped (in seconds): 9.668, 9.819, 9.435
 //
-//
-//
+//  Number of boards on the first round: 85,088. With alpha-beta pruning.
+//  2nd round: 88,383.
+//  3rd round: 88,556.
+//  4th round: 88,564.
 
 #import "TTTBot.h"
 
@@ -24,10 +26,8 @@ static NSInteger count = 0;
 
 @interface TTTBot()
 @property (nonatomic, strong) const NSDictionary *emptyBoard;
-@property (nonatomic, strong) NSMutableDictionary *tree;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *playingBoard;
 @property (nonatomic, readwrite) NSInteger numberOfRoundsLeft;
-@property (nonatomic, strong) NSDictionary *currentTreePointer;
 @end
 
 @implementation TTTBot
@@ -42,7 +42,6 @@ static NSInteger count = 0;
     self = [super init];
     if (self) {
 //        NSLog(@"Bot is loading...");
-        self.tree = [NSMutableDictionary dictionary];
         self.botSymbol = botSymbol;
         self.playerSymbol = playerSymbol;
         self.botStartsTheGame = botStartsTheGame;
@@ -171,7 +170,6 @@ static NSInteger count = 0;
 
 - (void)restartGame {
     self.playingBoard = [NSMutableDictionary dictionaryWithCapacity:9];
-    self.currentTreePointer = self.tree;
     self.numberOfRoundsLeft = 9;
 }
 
@@ -279,13 +277,14 @@ static NSInteger count = 0;
             score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
             // Bot made the move. Look for higher score.
-            if (score > blockAlpha) {
+            if ([score integerValue] > [blockAlpha integerValue]) {
                 blockAlpha = score;
             }
             
-            if (blockAlpha >= blockBeta) {
+            if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
                 *stop = YES;
             }
+            count++;
         }];
         
         // This is the bot's best move.
@@ -299,13 +298,14 @@ static NSInteger count = 0;
             score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
             // Player made the move. Look for the worse scorer that player can get us.
-            if (score < blockBeta) {
+            if ([score integerValue] < [blockBeta integerValue]) {
                 blockBeta = score;
             }
             
-            if (blockAlpha >= blockBeta) {
+            if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
                 *stop = YES;
             }
+            count++;
         }];
         
         // This is the player's worst move.
