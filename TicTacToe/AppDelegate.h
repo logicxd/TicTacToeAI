@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) TicTacToeTableViewController *viewController;
+@property (nonatomic, strong) UIImageView *splashView;
 
 
 @end

@@ -16,6 +16,7 @@
 		6DC9BEDB1D53F00E00485270 /* TTTBot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DC9BEDA1D53F00E00485270 /* TTTBot.m */; };
 		6DE6E0111D4FEEDF00A4C23F /* TicTacToeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E0101D4FEEDF00A4C23F /* TicTacToeTableViewController.m */; };
 		6DE6E0171D4FEF9200A4C23F /* TTTCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6E0161D4FEF9200A4C23F /* TTTCell.m */; };
+		6DED5D2E1D6227FF00314B4E /* TTTInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DED5D2C1D6227FF00314B4E /* TTTInformationCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,8 @@
 		6DE6E0101D4FEEDF00A4C23F /* TicTacToeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicTacToeTableViewController.m; sourceTree = "<group>"; };
 		6DE6E0151D4FEF9200A4C23F /* TTTCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTCell.h; sourceTree = "<group>"; };
 		6DE6E0161D4FEF9200A4C23F /* TTTCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTCell.m; sourceTree = "<group>"; };
+		6DED5D2C1D6227FF00314B4E /* TTTInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTInformationCell.m; sourceTree = "<group>"; };
+		6DED5D2D1D6227FF00314B4E /* TTTInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTInformationCell.h; sourceTree = "<group>"; };
 		A2AEF72B480A4750FAE663AA /* Pods-TicTacToe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TicTacToe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe.debug.xcconfig"; sourceTree = "<group>"; };
 		CC7F288EF3FB43798AC948AB /* Pods-TicTacToe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TicTacToe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TicTacToe/Pods-TicTacToe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +97,8 @@
 		6DC392F01D512FCA008E9343 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6DED5D2D1D6227FF00314B4E /* TTTInformationCell.h */,
+				6DED5D2C1D6227FF00314B4E /* TTTInformationCell.m */,
 				6DE6E0151D4FEF9200A4C23F /* TTTCell.h */,
 				6DE6E0161D4FEF9200A4C23F /* TTTCell.m */,
 			);
@@ -264,6 +269,7 @@
 				6DC9BEDB1D53F00E00485270 /* TTTBot.m in Sources */,
 				6D3444901D4FECD9002CF6D6 /* AppDelegate.m in Sources */,
 				6D34448D1D4FECD9002CF6D6 /* main.m in Sources */,
+				6DED5D2E1D6227FF00314B4E /* TTTInformationCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

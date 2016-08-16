@@ -16,4 +16,6 @@
 @property (nonatomic) NSInteger rowIndex;
 @property (nonatomic) BOOL showsBottomLine;
 @property (nonatomic, copy) void (^buttonHit)(NSInteger index);
+
+//@property (nonatomic, strong, readonly) UISwitch *switchButton;
 @end

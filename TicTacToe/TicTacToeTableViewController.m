@@ -9,12 +9,15 @@
 #import "TicTacToeTableViewController.h"
 #import "TTTCell.h"
 #import "TTTBot.h"
+#import "TTTInformationCell.h"
+#import "Masonry.h"
 
 @interface TicTacToeTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *view;
 @property (nonatomic) NSInteger nextTurn;
 @property (nonatomic, strong) NSMutableDictionary *board;
 @property (nonatomic, strong) TTTBot *bot;
+//@property (nonatomic, strong, readonly) UISwitch *switchButton;
 @end
 
 @implementation TicTacToeTableViewController
@@ -27,6 +30,8 @@
     self.view.separatorColor = [UIColor blackColor];
     
     [self.view registerClass:[TTTCell class] forCellReuseIdentifier:@"TTTCell"];
+    [self.view registerClass:[TTTInformationCell class] forCellReuseIdentifier:@"TTTInformationCell"];
+
 }
 
 - (void)viewDidLoad {
@@ -39,6 +44,7 @@
         TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.view.userInteractionEnabled = YES;
+            NSLog(@"Loading...");
             self.bot = bot;
             [self.view reloadData];
             NSLog(@"Data reloaded");
@@ -71,16 +77,8 @@
     return 3;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UILabel *headerLabel = [[UILabel alloc] init];
-    headerLabel.backgroundColor = [UIColor clearColor];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.text = @"Tic-Tac-Toe";
-    return headerLabel;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 70;
+    return 25;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -143,5 +141,60 @@
     
     return cell;
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    __weak typeof(self) weakSelf = self;
+  TTTInformationCell *footerCell = [tableView dequeueReusableCellWithIdentifier:@"TTTInformationCell"];
+    
+    footerCell.pressedResetButton = ^(){
+        [weakSelf.bot restartGame];
+        [weakSelf.view reloadData];
+//        [weakSelf.view reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+//        weakSelf.view reloadRowsAtIndexPaths:[NSArray 0,1,2] withRowAnimation:UITableViewRowAnimationNone];
+    };
+    
+    footerCell.pressedPlayerStartButton = ^(){
+        TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:NO];
+        NSLog(@"Loading...");
+        self.bot = bot;
+        [weakSelf.bot restartGame];
+        [weakSelf.view reloadData];
+        NSLog(@"Ready!");
+    };
+    
+    footerCell.pressedBotStartButton = ^(){
+        TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
+        NSLog(@"Loading...");
+        self.bot = bot;
+        [weakSelf.bot restartGame];
+        [weakSelf.view reloadData];
+        NSLog(@"Ready!");
+    };
+//    footerCell.pressedSwitchButton = ^(UISwitch *buttonSwitch){
+//        if ([buttonSwitch isOn]){
+//            NSLog(@"Button Switch ON");
+//            TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
+//            self.bot = bot;
+//        } else {
+//            NSLog(@"Button Switch OFF");
+//            TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:NO];
+//            self.bot = bot;
+//        }
+//        [weakSelf.view reloadData];
+//        
+//    };
+//    
+//    if (weakSelf.bot.botStartsTheGame == YES) {
+//        NSLog(@"BOT Starts the game");
+//    } else if (weakSelf.bot.botStartsTheGame == NO){
+//        NSLog(@"PLAYER Starts the game");
+//    }
+    return footerCell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 90;
+}
+
 
 @end
