@@ -31,7 +31,7 @@
 - (BOOL)botsTurnInGame;                                         // Returns true if it's bot's turn.
 - (NSString *)checkForWinner;                                   // Returns the winner's symbol if a winner is determined. Nil otherwise.
 - (void)restartGame;                                            // Restarts the game.
-
+- (NSArray<NSNumber *> *)winningIndicesWithBoard:(NSDictionary *)board;
 @end
 
 

@@ -36,7 +36,7 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];        
+    [super viewDidLoad];
     
     self.view.userInteractionEnabled = NO;
     
@@ -71,7 +71,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     return 120;
 }
 
@@ -153,7 +153,7 @@
     
     TTTInformationCell *footerCell = [tableView dequeueReusableCellWithIdentifier:@"TTTInformationCell"];
     __block __weak typeof(TTTInformationCell) *weakFooterCell = footerCell;
-
+    
     footerCell.pressedResetButton = ^(){
         weakSelf.view.userInteractionEnabled = NO;
         [weakSelf.bot restartGame];
@@ -169,7 +169,7 @@
                                                 [NSIndexPath indexPathForRow:2 inSection:0]
                                                 ]
                              withRowAnimation:UITableViewRowAnimationLeft];
-
+        
         weakSelf.view.userInteractionEnabled = YES;
     };
     
@@ -193,7 +193,7 @@
                                                 ]
                              withRowAnimation:UITableViewRowAnimationLeft];
         
-//        [weakFooterCell.indicator stopAnimating];
+        [weakFooterCell.indicator stopAnimating];
         weakSelf.view.userInteractionEnabled = YES;
     };
     
@@ -217,9 +217,9 @@
                                                 ]
                              withRowAnimation:UITableViewRowAnimationRight];
         
-//        [weakFooterCell.indicator stopAnimating];
+        [weakFooterCell.indicator stopAnimating];
         weakSelf.view.userInteractionEnabled = YES;
-
+        
     };
     
     
