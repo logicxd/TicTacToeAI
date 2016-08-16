@@ -76,7 +76,7 @@ static NSInteger count = 0;
     NSDictionary *emptyPositions = [self emptyPositionsWithBoard:filledBoard];
     [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull positionIndex, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSDictionary *board = [self markBoard:filledBoard positionIndex:positionIndex symbol:self.botSymbol];
-        NSNumber *score = [self alphaBetaScoreWithBoard:board alpha:@(NSIntegerMin) beta:@(NSIntegerMax) depthLevel:@(9 - self.numberOfRoundsLeft) depthToStopAtInclusively:@(9)];
+        NSNumber *score = [self alphaBetaScoreWithBoard:board alpha:@(NSIntegerMin) beta:@(NSIntegerMax) depthLevel:@(9 - self.numberOfRoundsLeft) depthToStopAfter:@(9)];
         
         availableMoves[positionIndex] = score;
     }];
@@ -114,6 +114,7 @@ static NSInteger count = 0;
     // Make the move
     self.playingBoard[@(intKey)] = self.botSymbol;
     self.numberOfRoundsLeft--;
+    count = 0;
     return intKey;
 }
 
@@ -252,13 +253,13 @@ static NSInteger count = 0;
 
 #pragma mark - Alpha Beta Score
 
-- (NSNumber *)alphaBetaScoreWithBoard:(NSDictionary *)parentBoard alpha:(NSNumber *)alpha beta:(NSNumber *)beta depthLevel:(NSNumber *)depthLevel depthToStopAtInclusively:(NSNumber *)depthToStopAt{
+- (NSNumber *)alphaBetaScoreWithBoard:(NSDictionary *)parentBoard alpha:(NSNumber *)alpha beta:(NSNumber *)beta depthLevel:(NSNumber *)depthLevel depthToStopAfter:(NSNumber *)depthToStopAfter{
     BOOL botWillMove = NO;
     if ([[self whoWillMove:depthLevel] isEqualToString:[self botSymbol]]) {
         botWillMove = YES;
     }
     
-    if ([self gameIsCompleteWithBoard:parentBoard] || [depthLevel isEqualToNumber:depthToStopAt]) {
+    if ([self gameIsCompleteWithBoard:parentBoard] || [depthLevel isEqualToNumber:@([depthLevel integerValue] + [depthToStopAfter integerValue])]) {
         return [self scoreWithBoard:parentBoard botDidMove:botWillMove ? NO : YES];
     }
     
@@ -274,7 +275,7 @@ static NSInteger count = 0;
             // Board: eachBoard represents a SINGLE branch from parent board.
             NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
-            score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
+            score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAfter:@([depthToStopAfter integerValue] - 1)];
             
             // Bot made the move. Look for higher score.
             if ([score integerValue] > [blockAlpha integerValue]) {
@@ -295,7 +296,7 @@ static NSInteger count = 0;
             // Board: eachBoard represents a SINGLE branch from parent board.
             NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
-            score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
+            score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAfter:depthToStopAfter];
             
             // Player made the move. Look for the worse scorer that player can get us.
             if ([score integerValue] < [blockBeta integerValue]) {

@@ -35,7 +35,7 @@
     
     NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
     [backgroundQueue addOperationWithBlock:^{
-        TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:YES];
+        TTTBot *bot = [[TTTBot alloc] initWithBotSymbol:@"O" playerSymbol:@"X" botStartsTheGame:NO];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.view.userInteractionEnabled = YES;
             self.bot = bot;
