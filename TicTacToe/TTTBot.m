@@ -72,8 +72,9 @@ static NSInteger count = 0;
     }];
     
     // Load alpha-beta scores.
-    NSMutableDictionary *availableMoves = [NSMutableDictionary dictionary];
+    NSMutableDictionary *availableMoves = [NSMutableDictionary dictionaryWithCapacity:9];
     NSDictionary *emptyPositions = [self emptyPositionsWithBoard:filledBoard];
+    NSMutableArray *uniqueBoards = [NSMutableArray arrayWithCapacity:9];
     [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull positionIndex, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSDictionary *board = [self markBoard:filledBoard positionIndex:positionIndex symbol:self.botSymbol];
         NSNumber *score = [self alphaBetaScoreWithBoard:board alpha:@(NSIntegerMin) beta:@(NSIntegerMax) depthLevel:@(9 - self.numberOfRoundsLeft) depthToStopAtInclusively:@(9)];
@@ -422,7 +423,7 @@ static NSInteger count = 0;
 
 #pragma mark - Helper Methods
 
-- (BOOL) botsTurnWithDepthLevel:(NSNumber *)depthLevel {
+- (BOOL)botsTurnWithDepthLevel:(NSNumber *)depthLevel {
     BOOL isItBotsTurn = NO;
     
     //Even
@@ -476,6 +477,74 @@ static NSInteger count = 0;
     }
     
     return nil;
+}
+
+- (BOOL)checkIfThisBoard:(NSDictionary *)rotatingBoard rotatesToThisBoard:(NSDictionary *)board{
+    NSNumber *corner = @(0);
+    NSNumber *side = @(1);
+//    if (rotatingBoard[corner] == board[@(0)] && rotatingBoard[side] == board[@(1)]) {
+//        
+//        if (rotatingBoard[@(2)] == board[@(2)] &&
+//            rotatingBoard[@(3)] == board[@(3)] &&
+//            rotatingBoard[@(4)] == board[@(4)] &&
+//            rotatingBoard[@(5)] == board[@(5)] &&
+//            rotatingBoard[@(6)] == board[@(6)] &&
+//            rotatingBoard[@(7)] == board[@(7)] &&
+//            rotatingBoard[@(8)] == board[@(8)]
+//            ) {
+//            return YES;
+//        }
+//    }
+    
+    corner = @(6);
+    side = @(3);
+    if (rotatingBoard[corner] == board[@(0)] && rotatingBoard[side] == board[@(1)]) {
+        
+        if (rotatingBoard[@(0)] == board[@(2)] &&
+            rotatingBoard[@(7)] == board[@(3)] &&
+            rotatingBoard[@(4)] == board[@(4)] &&
+            rotatingBoard[@(1)] == board[@(5)] &&
+            rotatingBoard[@(8)] == board[@(6)] &&
+            rotatingBoard[@(5)] == board[@(7)] &&
+            rotatingBoard[@(2)] == board[@(8)]
+            ) {
+            return YES;
+        }
+    }
+    
+    corner = @(8);
+    side = @(7);
+    if (rotatingBoard[corner] == board[@(0)] && rotatingBoard[side] == board[@(1)]) {
+        
+        if (rotatingBoard[@(6)] == board[@(2)] &&
+            rotatingBoard[@(5)] == board[@(3)] &&
+            rotatingBoard[@(4)] == board[@(4)] &&
+            rotatingBoard[@(3)] == board[@(5)] &&
+            rotatingBoard[@(2)] == board[@(6)] &&
+            rotatingBoard[@(1)] == board[@(7)] &&
+            rotatingBoard[@(0)] == board[@(8)]
+            ) {
+            return YES;
+        }
+    }
+    
+    corner = @(2);
+    side = @(5);
+    if (rotatingBoard[corner] == board[@(0)] && rotatingBoard[side] == board[@(1)]) {
+        
+        if (rotatingBoard[@(8)] == board[@(2)] &&
+            rotatingBoard[@(1)] == board[@(3)] &&
+            rotatingBoard[@(4)] == board[@(4)] &&
+            rotatingBoard[@(7)] == board[@(5)] &&
+            rotatingBoard[@(0)] == board[@(6)] &&
+            rotatingBoard[@(3)] == board[@(7)] &&
+            rotatingBoard[@(6)] == board[@(8)]
+            ) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end
