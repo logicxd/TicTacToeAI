@@ -28,7 +28,7 @@
 - (NSInteger)botMovedAtIndex;                                   // Bot makes a move and returns the index where it marked. Returns -1 if invalid.
 - (NSInteger)botMovedAtIndexWithPlayerMove:(NSInteger)index;    // Player makes a move at index, and then the bot moves. Returns -1 if invalid.
 - (NSInteger)playerMovedAtIndex:(NSInteger)index;               // Player passes in the index where it marked. Returns -1 if invalid.
-- (BOOL)botsTurnInGame;                                               // Returns true if it's bot's turn.
+- (BOOL)botsTurnInGame;                                         // Returns true if it's bot's turn.
 - (NSString *)checkForWinner;                                   // Returns the winner's symbol if a winner is determined. Nil otherwise.
 - (void)restartGame;                                            // Restarts the game.
 

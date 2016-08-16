@@ -13,7 +13,6 @@
 @interface TicTacToeTableViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *view;
 @property (nonatomic) NSInteger nextTurn;
-@property (nonatomic, strong) NSMutableDictionary *board;
 @property (nonatomic, strong) TTTBot *bot;
 @end
 
@@ -44,18 +43,6 @@
             NSLog(@"Data reloaded");
         }];
     }];
-    
-    self.board = [@{
-                    @0 : @"0",
-                    @1 : @"1",
-                    @2 : @"2",
-                    @3 : @"3",
-                    @4 : @"4",
-                    @5 : @"5",
-                    @6 : @"6",
-                    @7 : @"7",
-                    @8 : @"8",
-                   } mutableCopy];
     
     self.view.delegate = self;
     self.view.dataSource = self;
@@ -124,7 +111,7 @@
         NSString *winner = [weakSelf.bot checkForWinner];
         if (winner) {
             NSLog(@"Winner is %@", winner);
-        } else if (!winner && [weakSelf.bot numberOfRoundsLeft] == 0){
+        } else if (!winner && [weakSelf.bot numberOfRoundsLeft] == 0) {
             NSLog(@"Game is a tie");
         }
         
