@@ -1,6 +1,6 @@
 # TicTacToeAI
 
-Create an AI Tic-Tac-Toe bot that will never lose.
+Tic-Tac-Toe bot that will never lose, implemented with AI design MiniMax.
 
 ### Overview
 
