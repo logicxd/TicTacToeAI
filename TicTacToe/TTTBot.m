@@ -5,6 +5,11 @@
 //  Created by Aung Moe on 8/2/16.
 //  Copyright © 2016 Alaric Gonzales. All rights reserved.
 //
+//  Theoretical Computation: (First try)
+//  1 + 9 + 9 * 8 + (9 * 8) * 7 + ... + 9!
+//  1 + Summation(9!/K!) where K == 0 until K == 8
+//  1 + 986409 == 986410 (Same as actual computation)
+//
 //  Number of boards: 549,945. No alpha-beta pruning. Stops once a winner is found.
 //  Time elasped (in seconds): 9.668, 9.819, 9.435
 //
