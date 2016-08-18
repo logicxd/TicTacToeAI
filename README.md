@@ -15,7 +15,7 @@ Tic-Tac-Toe bot that will never lose, implemented with AI design MiniMax.
 
 <!-- ![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17762272/d5e007b4-64c3-11e6-909d-f1bd0a185003.gif) -->
 
-### Creating the Bot
+## Creating the Bot
 
 ![TicTacToe Possible Moves Tree](https://cloud.githubusercontent.com/assets/12219300/17763574/5cbc0e22-64ce-11e6-95d7-2e4397cce8fb.jpg)
 
@@ -40,23 +40,23 @@ With this method, it was a faster initial load, with the downside of having to l
 
 This is an overestimated table of the number of boards made with Alpha-Beta pruning at every round.
 
-Round  |  # of boards
---     | --
-1      | 85,097
-2      | ~22,000
-3      | ~3,500
-4      | ~1,000
-5      | ~200
-6      | ~70
-7      | ~20
-8      | ~5
-9      | <= 1
-Total  | **~111,000**
+Round   |  # of boards
+---     | ---
+1       | 85,097
+2       | ~22,000
+3       | ~3,500
+4       | ~1,000
+5       | ~200
+6       | ~70
+7       | ~20
+8       | ~5
+9       | <= 1
+Total   | **~111,000**
 
 Here's a rough data of loading speed with each implementation run on iPhone 4s simulator on my MacBook.
 
 Algorithm  | # of boards  |  Initial loading speed (seconds) | 1st round loading speed (seconds) | 2nd round loading speed (seconds)
---         | ---          | ---                              | --- | --
+---        | ---          | ---                              | ---                               | ---
 All possible moves  | 986,410 |  15 s | 0 s | 0 s
 All possible moves w/ checks for winner  | 549,945 | 9 s| 0 s | 0 s
 Alpha-Beta pruning | 111,000 | 0 s | 1.5 s | 0.4 s
