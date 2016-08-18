@@ -38,7 +38,7 @@ Instead of checking for a winner like before, it checks for the scores that are 
 This reduced the amount of boards at initial load to **85,088**!
 With this method, it was a faster initial load, with the downside of having to load every bot's turn, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.
 
-This is an overestimated table of the number of boards made with Alpha-Beta pruning at every round.
+This is an overestimated number of boards made with Alpha-Beta pruning at every round.
 
 Round   |  # of boards
 ---     | ---
@@ -53,7 +53,7 @@ Round   |  # of boards
 9       | <= 1
 Total   | **~111,000**
 
-Here's a rough data of loading speed with each implementation run on iPhone 4s simulator on my MacBook.
+Here's a rough comparison between each implementation with the iPhone 4s simulator on my MacBook.
 
 Algorithm  | # of boards  |  Initial loading speed (seconds) | 1st round loading speed (seconds) | 2nd round loading speed (seconds)
 ---        | ---          | ---                              | ---                               | ---
