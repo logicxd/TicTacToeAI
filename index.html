@@ -40,20 +40,123 @@
 </li>
 </ul>
 
-<p><img src="https://cloud.githubusercontent.com/assets/12219300/17762269/c57e3ca6-64c3-11e6-8409-a4868ee59d7e.gif" alt="TicTacToeAI With Alpha-Beta pruning"></p>
+<p><img src="https://cloud.githubusercontent.com/assets/12219300/17765188/1ef01e52-64d9-11e6-8e27-c3e46e20d01a.gif" alt="TicTacToeAI With Alpha-Beta pruning"></p>
 
 
 
-<h3>
-<a id="creating-the-bot" class="anchor" href="#creating-the-bot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating the Bot</h3>
+<h2>
+<a id="creating-the-bot" class="anchor" href="#creating-the-bot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating the Bot</h2>
 
-<p>The first implementation of the bot was done by making <strong>ALL</strong> the possible moves from the start to the finish and adding them to a tree. This created <strong>A LOT OF</strong> moves which was 1 + Summation(9!/K!) where K = 0 to K = 8, summing to <strong>986,410 boards</strong>! The initial loading time for this was pretty long because there were waaaay too many boards, but we were happy to see that at least we have a working tree.</p>
+<p><img src="https://cloud.githubusercontent.com/assets/12219300/17765292/c83650a8-64d9-11e6-8039-93aff9365229.jpg" alt="TicTacToe Possible Moves Tree"></p>
 
-<p>Not all the possible moves are necessary because <strong>the game can end earlier if there is a winner</strong>. So after adding a check to stop making boards when a winner is found, the amount of boards reduced to <strong>549,945</strong>.</p>
+<p>Photo taken from <a href="http://www.devx.com/dotnet/Article/34912">http://www.devx.com/dotnet/Article/34912</a></p>
 
-<p>All the methods so far has been loading the entire tree at the initial load. So with our method, it has a <strong>very long initial load</strong> but after the game is loaded, <strong>the bot moves instantly</strong>.</p>
+<p>The first implementation of the bot was done by making all the possible moves from the start to the finish and adding how the board looks like to a tree.
+Then, I added a variable to count just exactly how many boards are created, which turned out to be <strong>986,410</strong>.
+I checked it by deriving a formula from the pattern <code>1 + 9 + (9) * 8 + (9 * 8) * 7 + ... + 9!</code> which is <code>1 + Summation(9!/K!) where K = 0 to K = 8</code>, getting us 986,410 boards!
+So, the initial loading time was pretty long because there were waaaay too many boards, but we were happy to see that at least we have a working tree.
+The tree looks exactly like the picture above.</p>
 
-<p>In order to make the initial load not so displeasing, <a href="https://www.ocf.berkeley.edu/%7Eyosenl/extras/alphabeta/alphabeta.html">Alpha-Beta pruning</a> technique was implemented with the Minimax algorithm. Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees. This reduced the amount of boards at initial load to <strong>85,088</strong>! With this method, it was a <strong>faster initial load</strong>, with the downside of having to <strong>load every bot's turn</strong>, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.</p>
+<p>Not all the possible moves are necessary because the game can end earlier if there is a winner.
+So after adding a check to stop making boards when a winner is found, the amount of boards reduced to <strong>549,945</strong> and so did our initial loading time.</p>
+
+<p>All the methods so far has been loading the entire tree at the initial load.
+So with our method, it has a very long initial load but after the game is loaded, the bot moves instantly.</p>
+
+<p>In order to make the initial load not so displeasing, <a href="https://www.ocf.berkeley.edu/%7Eyosenl/extras/alphabeta/alphabeta.html">Alpha-Beta pruning</a> technique was implemented with the Minimax algorithm.
+Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees.
+This reduced the amount of boards at initial load to <strong>85,088</strong>!
+With this method, it was a faster initial load, with the downside of having to load every bot's turn, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.</p>
+
+<p>This is an overestimated number of boards made with Alpha-Beta pruning at every round.</p>
+
+<table>
+<thead>
+<tr>
+<th>Round</th>
+<th># of boards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>85,097</td>
+</tr>
+<tr>
+<td>2</td>
+<td>~22,000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>~3,500</td>
+</tr>
+<tr>
+<td>4</td>
+<td>~1,000</td>
+</tr>
+<tr>
+<td>5</td>
+<td>~200</td>
+</tr>
+<tr>
+<td>6</td>
+<td>~70</td>
+</tr>
+<tr>
+<td>7</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>8</td>
+<td>~5</td>
+</tr>
+<tr>
+<td>9</td>
+<td>&lt;= 1</td>
+</tr>
+<tr>
+<td>Total</td>
+<td><strong>~111,000</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>Here's a rough comparison between each implementation with the iPhone 4s simulator on my MacBook.</p>
+
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th># of boards</th>
+<th>Initial loading speed (seconds)</th>
+<th>1st round loading speed (seconds)</th>
+<th>2nd round loading speed (seconds)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All possible moves</td>
+<td>986,410</td>
+<td>15 s</td>
+<td>0 s</td>
+<td>0 s</td>
+</tr>
+<tr>
+<td>All possible moves w/ checks for winner</td>
+<td>549,945</td>
+<td>9 s</td>
+<td>0 s</td>
+<td>0 s</td>
+</tr>
+<tr>
+<td>Alpha-Beta pruning</td>
+<td>111,000</td>
+<td>0 s</td>
+<td>1.5 s</td>
+<td>0.4 s</td>
+</tr>
+</tbody>
+</table>
 
 <h3>
 <a id="scoring-the-bot" class="anchor" href="#scoring-the-bot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoring the Bot</h3>
