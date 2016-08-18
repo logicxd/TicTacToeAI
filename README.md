@@ -23,7 +23,7 @@ Photo taken from http://www.devx.com/dotnet/Article/34912
 
 The first implementation of the bot was done by making all the possible moves from the start to the finish and adding how the board looks like to a tree.
 Then, I added a variable to count just exactly how many boards are created, which turned out to be **986,410**.
-I checked it by deriving a formula from the pattern `1 + 9 + (9) \* 8 + (9 \* 8) \* 7 + ... + 9!` which is `1 + Summation(9!/K!) where K = 0 to K = 8`, getting us 986,410 boards!
+I checked it by deriving a formula from the pattern `1 + 9 + (9) * 8 + (9 * 8) * 7 + ... + 9!` which is `1 + Summation(9!/K!) where K = 0 to K = 8`, getting us 986,410 boards!
 So, the initial loading time was pretty long because there were waaaay too many boards, but we were happy to see that at least we have a working tree.
 The tree looks exactly like the picture above.
 
