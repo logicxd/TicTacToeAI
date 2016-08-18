@@ -11,13 +11,13 @@ Tic-Tac-Toe bot that will never lose, implemented with AI design MiniMax.
   3. Alpha-Beta pruning: Minimax with cut-offs to load the game faster.
   4. (To-Do) Rotations and reflections: Alpha-Beta pruning with even more cut-offs by using symmetry.
 
-![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17762269/c57e3ca6-64c3-11e6-8409-a4868ee59d7e.gif)
+![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17765188/1ef01e52-64d9-11e6-8e27-c3e46e20d01a.gif)
 
 <!-- ![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17762272/d5e007b4-64c3-11e6-909d-f1bd0a185003.gif) -->
 
 ## Creating the Bot
 
-![TicTacToe Possible Moves Tree](https://cloud.githubusercontent.com/assets/12219300/17763574/5cbc0e22-64ce-11e6-95d7-2e4397cce8fb.jpg)
+![TicTacToe Possible Moves Tree](https://cloud.githubusercontent.com/assets/12219300/17765292/c83650a8-64d9-11e6-8039-93aff9365229.jpg)
 
 Photo taken from http://www.devx.com/dotnet/Article/34912
 
