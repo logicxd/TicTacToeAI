@@ -5,13 +5,20 @@
 //  Created by Aung Moe on 8/2/16.
 //  Copyright © 2016 Alaric Gonzales. All rights reserved.
 //
+//  Number of boards: 986,410 without stopping once winner is found.
+//
 //  Number of boards: 549,945. No alpha-beta pruning. Stops once a winner is found.
 //  Time elasped (in seconds): 9.668, 9.819, 9.435
 //
-//  Number of boards on the first round: 85,088. With alpha-beta pruning.
-//  2nd round: 88,383.
-//  3rd round: 88,556.
-//  4th round: 88,564.
+//  Number of boards on the first round: 85,097. With alpha-beta pruning.
+//  2nd round: ~22,000.
+//  3rd round: ~3,500.
+//  4th round: ~1000.
+//  5th round: ~200.
+//  6th round: ~60.
+//  7th round: ~20.
+//  8th round: ~5;
+//  9th round: <= 1;
 
 #import "TTTBot.h"
 
@@ -79,6 +86,7 @@ static NSInteger count = 0;
         NSNumber *score = [self alphaBetaScoreWithBoard:board alpha:@(NSIntegerMin) beta:@(NSIntegerMax) depthLevel:@(9 - self.numberOfRoundsLeft) depthToStopAtInclusively:@(9)];
         
         availableMoves[positionIndex] = score;
+        count++;
     }];
     
     // Get the highest possible score for bot.
@@ -112,6 +120,7 @@ static NSInteger count = 0;
     NSInteger intKey = [bestMoves[arc4random_uniform(bestMoves.count)] integerValue];
     
     // Make the move
+    NSLog(@"Count: %i", count);
     count = 0;
     self.playingBoard[@(intKey)] = self.botSymbol;
     self.numberOfRoundsLeft--;
