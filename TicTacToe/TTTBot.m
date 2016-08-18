@@ -112,6 +112,7 @@ static NSInteger count = 0;
     NSInteger intKey = [bestMoves[arc4random_uniform(bestMoves.count)] integerValue];
     
     // Make the move
+    count = 0;
     self.playingBoard[@(intKey)] = self.botSymbol;
     self.numberOfRoundsLeft--;
     return intKey;

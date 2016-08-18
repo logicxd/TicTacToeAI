@@ -9,15 +9,23 @@ Tic-Tac-Toe bot that will never lose, implemented with AI design MiniMax.
   1. Average score: the bot goes for the highest score available.
   2. Minimax score: the bot minimizes the player's score.
   3. Alpha-Beta pruning: Minimax with cut-offs to load the game faster.
-  4. Rotations and reflections: Alpha-Beta pruning with even more cut-offs by using symmetry.
+  4. (To-Do) Rotations and reflections: Alpha-Beta pruning with even more cut-offs by using symmetry.
 
-![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17745811/2886d658-6462-11e6-9b8c-235e978cefea.gif)
+![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17762269/c57e3ca6-64c3-11e6-8409-a4868ee59d7e.gif)
+
+<!-- ![TicTacToeAI With Alpha-Beta pruning](https://cloud.githubusercontent.com/assets/12219300/17762272/d5e007b4-64c3-11e6-909d-f1bd0a185003.gif) -->
 
 ### Creating the Bot
 
 The first implementation of the bot was done by making **ALL** the possible moves from the start to the finish and adding them to a tree. This created **A LOT OF** moves which was 1 + Summation(9!/K!) where K = 0 to K = 8, summing to **986,410 boards**! The initial loading time for this was pretty long because there were waaaay too many boards, but we were happy to see that at least we have a working tree.
 
-Not all the possible moves are necessary because **the game can end earlier if there is a winner**. So after adding a check to get the winner and stopping the board making process, the amount of boards reduced to **549,945**. This reduced the initial load of the bot to about 9 seconds on average.
+Not all the possible moves are necessary because **the game can end earlier if there is a winner**. So after adding a check to stop making boards when a winner is found, the amount of boards reduced to **549,945**.
+
+All the methods so far has been loading the entire tree at the initial load. So with our method, it has a **very long initial load** but after the game is loaded, **the bot moves instantly**.
+
+In order to make the initial load not so displeasing, [Alpha-Beta pruning](https://www.ocf.berkeley.edu/~yosenl/extras/alphabeta/alphabeta.html) technique was implemented with the Minimax algorithm. Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees. This reduced the amount of boards at initial load to **85,088**! With this method, it was a **faster initial load**, with the downside of having to **load every bot's turn**, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.
+
+### Scoring the Bot
 
 
 
