@@ -61,8 +61,24 @@ All possible moves  | 986,410 |  15 s | 0 s | 0 s
 All possible moves w/ checks for winner  | 549,945 | 9 s| 0 s | 0 s
 Alpha-Beta pruning | 111,000 | 0 s | 1.5 s | 0.4 s
 
-
 ### Scoring the Bot
+
+![Scoring picture](https://cloud.githubusercontent.com/assets/12219300/17835933/80bf37bc-6736-11e6-9aca-f5612ccd4573.jpg)
+
+Photo taken from http://users.sussex.ac.uk/~christ/crs/kr-ist/lec05a.html
+
+We used a tree where each depth represents a move made on the board. The scores are calculated at the leaf nodes when the game ends, and then are passed to the parents all the way to the root. If the bot wins, then a score of 1 is returned, a score of -1 for losing, and 0 for a tie.
+
+##### ~~Average Score~~
+
+(insert picture of the bot's error)
+
+The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning. The idea was that the children with the higher average score will lead to higher chance of winning. This did not work, however. It made the bot too focused on getting the higher score that it did not care to block opponent's victories. With this, the bot was not unbeatable as we wanted it to be.
+
+##### Minimax Score
+
+Minimax is the idea of minimizing the opponent's maximum score. So the bot will pick a move that will give the opponent the lowest score possible. By using this method, the bot will continuously keep blocking the opponent's move and pick a move that is the best move that he could take. 
+
 
 
 
