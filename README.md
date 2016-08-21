@@ -81,7 +81,11 @@ Minimax is the idea of minimizing the opponent's maximum score. So the bot will 
 
 ##### Alpha-Beta Pruning
 
-Alpha-Beta pruning is 
+Alpha-Beta pruning is a way of reducing the amount of search by not exploring the child nodes that will never be searched. This is done by having two variables given the names *alpha* and *beta* to keep track of scores for alpha-cutoff and beta-cutoff. Chris Thronton explains in [his lecture](http://users.sussex.ac.uk/%7Echrist/crs/kr-ist/lec05a.html):
+> * Applying an **alpha-cutoff** means we stop search of a particular branch because we see that we already have a better opportunity elsewhere.
+> * Applying a **beta-cutoff** means we stop search of a particular branch because we see that the opponent already has a better opportunity elsewhere. 
+
+
 
 
 ---
