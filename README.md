@@ -73,13 +73,15 @@ We used a tree where each depth represents a move made on the board. The scores 
 
 (insert picture of the bot's error)
 
-The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning. The idea was that the children with the higher average score will lead to higher chance of winning. This did not work, however. It made the bot too focused on getting the higher score that it did not care to block opponent's victories. With this, the bot was not unbeatable as we wanted it to be.
+The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning. The idea was that the children with the higher average score will lead to higher chance of winning. However, this will not work with Tic-Tac-Toe. It made the bot too focused on going towards the higher possible moves towards victory that it did not care to block opponent's. With this, the bot was not unbeatable as we wanted it to be.
 
 ##### Minimax Score
 
-Minimax is the idea of minimizing the opponent's maximum score. So the bot will pick a move that will give the opponent the lowest score possible. By using this method, the bot will continuously keep blocking the opponent's move and pick a move that is the best move that he could take. 
+Minimax is the idea of minimizing the opponent's maximum score. So the bot will pick a move that will give the opponent the lowest score possible. By using this method, the bot will continuously block the opponent's moves if it leads them to vicotry while also going for any possible victories. As a result, using the Minimax algorithm allowed us to create an unbeatable bot in Tic-Tac-Toe. 
 
+##### Alpha-Beta Pruning
 
+Alpha-Beta pruning is 
 
 
 ---
