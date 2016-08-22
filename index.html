@@ -33,8 +33,8 @@
 
 <ol>
 <li>Average score: the bot goes for the highest score available.</li>
-<li>Minimax score: the bot minimizes the player's score.</li>
-<li>Alpha-Beta pruning: Minimax with cut-offs to load the game faster.</li>
+<li>MiniMax score: the bot minimizes the player's score.</li>
+<li>Alpha-Beta pruning: MiniMax with cut-offs to load the game faster.</li>
 <li>(To-Do) Rotations and reflections: Alpha-Beta pruning with even more cut-offs by using symmetry.</li>
 </ol>
 </li>
@@ -63,7 +63,7 @@ So after adding a check to stop making boards when a winner is found, the amount
 <p>All the methods so far has been loading the entire tree at the initial load.
 So with our method, it has a very long initial load but after the game is loaded, the bot moves instantly.</p>
 
-<p>In order to make the initial load not so displeasing, <a href="https://www.ocf.berkeley.edu/%7Eyosenl/extras/alphabeta/alphabeta.html">Alpha-Beta pruning</a> technique was implemented with the Minimax algorithm.
+<p>In order to make the initial load not so displeasing, <a href="https://www.ocf.berkeley.edu/%7Eyosenl/extras/alphabeta/alphabeta.html">Alpha-Beta pruning</a> technique was implemented with the MiniMax algorithm.
 Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees.
 This reduced the amount of boards at initial load to <strong>85,088</strong>!
 With this method, it was a faster initial load, with the downside of having to load every bot's turn, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.</p>
@@ -158,8 +158,64 @@ With this method, it was a faster initial load, with the downside of having to l
 </tbody>
 </table>
 
-<h3>
-<a id="scoring-the-bot" class="anchor" href="#scoring-the-bot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoring the Bot</h3>
+<h2>
+<a id="scoring-the-bot" class="anchor" href="#scoring-the-bot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scoring the Bot</h2>
+
+<p><img src="https://cloud.githubusercontent.com/assets/12219300/17835933/80bf37bc-6736-11e6-9aca-f5612ccd4573.jpg" alt="Scoring picture"></p>
+
+<p>Photo taken from <a href="http://users.sussex.ac.uk/%7Echrist/crs/kr-ist/lec05a.html">http://users.sussex.ac.uk/~christ/crs/kr-ist/lec05a.html</a></p>
+
+<p>We have a tree where each depth represents a move made on the board.
+The scores are calculated at the leaf nodes when the game ends, returning a score of 1 if the bot wins, 0 for a tie, and -1 for a loss.
+Then the scores are passed to the parents until it reached the root node.</p>
+
+<h5>
+<a id="average-score" class="anchor" href="#average-score" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><del>Average Score</del>
+</h5>
+
+<p>(insert picture of the bot's error)</p>
+
+<p>The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning.
+The idea was that the children with the higher average score will lead to higher chance of winning.
+While this is true, <strong>it didn't create an unbeatable Tic-Tac-Toe</strong>.
+It made the bot too focused on selecting the moves that leads it to higher chances of victory.
+What this means is that, even if the opponent is about to win in the next turn, the bot will continue to go towards a move where it <em>CAN</em> lead to higher chances of winning instead of blocking.
+Because the bot doesn't block the opponent's moves, the bot often loses and was not unbeatable as we wanted it to be.</p>
+
+<h5>
+<a id="minimax-score" class="anchor" href="#minimax-score" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MiniMax Score</h5>
+
+<p>MiniMax is the idea of minimizing the opponent's maximum score.
+So the bot will pick a move that will give the opponent the lowest score possible.
+By using this method, the bot will continuously block the opponent's moves, preventing them from winning, while also going for any possible victories.
+As a result, using the MiniMax algorithm allowed us to create an unbeatable bot in Tic-Tac-Toe.</p>
+
+<p>How MiniMax works is that, at every bot's turn, the bot will pick the child node with the lowest score.
+Now the thing is that the child node's scores are the opponent's scores.
+And how does the opponent pick the scores?
+The opponent picks the biggest score from it's child nodes.</p>
+
+<h5>
+<a id="alpha-beta-pruning" class="anchor" href="#alpha-beta-pruning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alpha-Beta Pruning</h5>
+
+<p>Alpha-Beta pruning is a way of reducing the amount of search by not exploring the child nodes that will never be searched.
+This is done by having two variables with given names <em>alpha</em> and <em>beta</em> to keep track of scores for alpha-cutoff and beta-cutoff.
+Chris Thronton explains in <a href="http://users.sussex.ac.uk/%7Echrist/crs/kr-ist/lec05a.html">his lecture</a>:</p>
+
+<blockquote>
+<ul>
+<li>Applying an <strong>alpha-cutoff</strong> means we stop search of a particular branch because we see that we already have a better opportunity elsewhere.</li>
+<li>Applying a <strong>beta-cutoff</strong> means we stop search of a particular branch because we see that the opponent already has a better opportunity elsewhere.</li>
+</ul>
+</blockquote>
+
+<p>So where does Alpha-Beta pruning come in?
+So let's say it's the bot's turn.
+It will populate the first child node, call it <code>A</code>, and get it's score.
+Next, it will have to find the score for the second child, call it <code>B</code>.
+Now the node <code>B</code> is the opponent's turn so it wants to pick the biggest score.
+We look at each child node of <code>B</code> and compare it with the score from <code>A</code>.
+If any child of node <code>B</code> is bigger than the score from <code>A</code>, then we stop exploring node <code>B</code> because we know we would never visit node <code>B</code> as node <code>A</code> has a lower score.</p>
 
 <hr>
 
