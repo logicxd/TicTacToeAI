@@ -279,14 +279,14 @@ static NSInteger count = 0;
     
     // Move has been made. Now we will get the score accordingly.
     if (botWillMove) {
-        // Bot made the move. Look for higher score.
+        // Bot will make the move.
         [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             // Board: eachBoard represents a SINGLE branch from parent board.
             NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
             score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
-            // Bot made the move. Look for higher score.
+            // Bot made the move.
             if ([score integerValue] > [blockAlpha integerValue]) {
                 blockAlpha = score;
             }
@@ -300,14 +300,14 @@ static NSInteger count = 0;
         // This is the bot's best move.
         return blockAlpha;
     } else {
-        // Player made the move. Look for the worse scorer that player can get us.
+        // Player will make the move.
         [emptyPositions enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             // Board: eachBoard represents a SINGLE branch from parent board.
             NSString *symbol = botWillMove ? self.botSymbol : self.playerSymbol;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
             score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
-            // Player made the move. Look for the worse scorer that player can get us.
+            // Player made the move.
             if ([score integerValue] < [blockBeta integerValue]) {
                 blockBeta = score;
             }
@@ -318,7 +318,7 @@ static NSInteger count = 0;
             count++;
         }];
         
-        // This is the player's worst move.
+        // This is the player's best move. (Bot's worse move)
         return blockBeta;
     }
 }
