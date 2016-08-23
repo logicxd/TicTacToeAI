@@ -68,7 +68,7 @@ Alpha-Beta pruning | 111,000 | 0 s | 1.5 s | 0.4 s
 Photo taken from http://users.sussex.ac.uk/~christ/crs/kr-ist/lec05a.html
 
 We have a tree where each depth represents a move made on the board.
-The scores are calculated at the leaf nodes when the game ends, returning a score of 1 if the bot wins, 0 for a tie, and -1 for a loss.
+The scores are calculated at the leaf nodes when the game ends, returning a score of 1 if the bot wins, 0 for a tie, and -1 for a loss. This is known as the **static score**.
 Then the scores are passed to the parents until it reached the root node.
 
 ##### ~~Average Score~~
@@ -85,14 +85,15 @@ Because the bot doesn't block the opponent's moves, the bot often loses and was 
 ##### MiniMax Score
 
 MiniMax is the idea of minimizing the opponent's maximum score.
-So the bot will pick a move that will give the opponent the lowest score possible.
+It goes like this:
+ * Build the game tree. The static scores are determined at the leaf nodes.
+ * Then start traversing backwards to the top of the tree.
+ * The bot node will pick the highest score from children.
+ * The player node will pick the smallest score from children.
+
+So the bot will pick moves that will give the opponent the lowest score possible, thus maximizing the bot's own score.
 By using this method, the bot will continuously block the opponent's moves, preventing them from winning, while also going for any possible victories.
 As a result, using the MiniMax algorithm allowed us to create an unbeatable bot in Tic-Tac-Toe.
-
-How MiniMax works is that, at every bot's turn, the bot will pick the child node with the lowest score.
-Now the thing is that the child node's scores are the opponent's scores.
-And how does the opponent pick the scores?
-The opponent picks the biggest score from it's child nodes.
 
 ##### Alpha-Beta Pruning
 
@@ -105,9 +106,9 @@ Chris Thronton explains in [his lecture](http://users.sussex.ac.uk/%7Echrist/crs
 So where does Alpha-Beta pruning come in?
 Let's say it's the bot's turn and that it has two children.
 
- 1. Bot's turn, root node: Wants to pick the lowest score from children. It will populate the first child node, call it `A`, and get it's score. Next, it will have to find the score for the second child, call it `B`.
+ 1. Bot's turn, root node: Wants to pick the highest score from children. It will populate the first child node, call it `A`, and get it's score. Next, it will have to find the score for the second child, call it `B`.
 
- 2. Opponent's turn, node `B`: Wants to pick the biggest score from children. We look at each child node of `B`, call them `B1, B2, B3, ..., Bn where n is any positive integer`.
+ 2. Opponent's turn, node `B`: Wants to pick the lowest score from children. We look at each child node of `B`, call them `B1, B2, B3, ..., Bn where n is any positive integer`.
 
  3. Bot's turn, node `B1, ..., Bn`: Re-iteration of step 1, with a plus. We know the score that node `A` got.
 
