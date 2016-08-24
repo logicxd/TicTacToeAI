@@ -65,7 +65,7 @@ So with our method, it has a very long initial load but after the game is loaded
 
 <p>In order to make the initial load not so displeasing, <a href="https://www.ocf.berkeley.edu/%7Eyosenl/extras/alphabeta/alphabeta.html">Alpha-Beta pruning</a> technique was implemented with the MiniMax algorithm.
 Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees.
-This reduced the amount of boards at initial load to <strong>85,088</strong>!
+This reduced the amount of boards at initial load to <strong>85,097</strong>!
 With this method, it was a faster initial load, with the downside of having to load every bot's turn, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.</p>
 
 <p>This is an overestimated number of boards made with Alpha-Beta pruning at every round.</p>
@@ -175,7 +175,7 @@ Then the scores are passed to the parents until it reached the root node.</p>
 
 <p><img src="https://cloud.githubusercontent.com/assets/12219300/17845944/723258d6-67fa-11e6-855c-02f494d717d2.jpeg" alt="Average score error"></p>
 
-<p>Photo credit: <a href="https://github.com/AlaricGonzales">Alaric</a></p>
+<p>Picture credit: <a href="https://github.com/AlaricGonzales">Alaric</a></p>
 
 <p>The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning.
 The idea was that the children with the higher average score will lead to higher chance of winning.
@@ -192,7 +192,7 @@ It goes like this:</p>
 
 <ul>
 <li>Build the game tree. The static scores are determined at the leaf nodes.</li>
-<li>Then start traversing backwards to the top of the tree.</li>
+<li>Start traversing back, passing scores to each parent nodes.</li>
 <li>The bot node will pick the highest score from children.</li>
 <li>The player node will pick the smallest score from children.</li>
 </ul>
@@ -220,7 +220,7 @@ As an example, let's say it's the bot's turn and that it has two children.</p>
 
 <ol>
 <li><p>Bot's turn, <code>root</code> node: Wants to pick the highest score from children. It will populate the first child node, call it <code>A</code>, and get it's score. Next, it will have to find the score for the second child, call it <code>B</code>.</p></li>
-<li><p>Opponent's turn, node <code>B</code>: Wants to pick the lowest score from children. It has 3 child <code>B1, B2, B3</code>. It wants to iterate through each one of those to get the lowest score <em>BUT</em> it also knows that <strong>the biggest score that the <code>root</code> node has found is from node <code>A</code></strong>. So we pass that biggest score to each of the children.</p></li>
+<li><p>Opponent's turn, node <code>B</code>: Wants to pick the lowest score from children. It has 3 child <code>B1, B2, B3</code>. It wants to iterate through each one of those to get the lowest score <em>BUT</em> it also knows that <strong>the biggest score that the <code>root</code> node has found is from node <code>A</code></strong>. It will also pass that biggest score as argument to each of the children.</p></li>
 <li><p>Bot's turn, node <code>B1</code>: Wants to pick the highest score. Re-iteration of step 1 and returns the biggest score to node <code>B</code>.</p></li>
 <li><p>Opponent's turn, back to node <code>B</code>: Now we have the score of <code>B1</code>. If the score of <code>B1</code> is smaller than the score from <code>root</code> node, then it doesn't have to search child nodes <code>B2</code> and  <code>B3</code>. The node <code>B</code> will pick a score from <code>B1</code> or smaller and the <code>root</code> node will pick a score bigger than score from <code>B1</code>. Because of that, the <code>root</code> node will end up never picking from the node <code>B</code>.</p></li>
 </ol>
