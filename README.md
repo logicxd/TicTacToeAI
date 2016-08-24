@@ -35,7 +35,7 @@ So with our method, it has a very long initial load but after the game is loaded
 
 In order to make the initial load not so displeasing, [Alpha-Beta pruning](https://www.ocf.berkeley.edu/~yosenl/extras/alphabeta/alphabeta.html) technique was implemented with the MiniMax algorithm.
 Instead of checking for a winner like before, it checks for the scores that are given from the children tree and decides whether or not it needs to check other trees.
-This reduced the amount of boards at initial load to **85,088**!
+This reduced the amount of boards at initial load to **85,097**!
 With this method, it was a faster initial load, with the downside of having to load every bot's turn, which wasn't bad because the number of boards needed to make for future moves are a lot smaller.
 
 This is an overestimated number of boards made with Alpha-Beta pruning at every round.
@@ -75,7 +75,7 @@ Then the scores are passed to the parents until it reached the root node.
 
 ![Average score error](https://cloud.githubusercontent.com/assets/12219300/17845944/723258d6-67fa-11e6-855c-02f494d717d2.jpeg)
 
-Photo credit: [Alaric](https://github.com/AlaricGonzales)
+Picture credit: [Alaric](https://github.com/AlaricGonzales)
 
 The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning.
 The idea was that the children with the higher average score will lead to higher chance of winning.
@@ -89,7 +89,7 @@ Because the bot doesn't block the opponent's moves, the bot often loses and was 
 MiniMax is the idea of minimizing the opponent's maximum score.
 It goes like this:
  * Build the game tree. The static scores are determined at the leaf nodes.
- * Then start traversing backwards to the top of the tree.
+ * Start traversing back, passing scores to each parent nodes.
  * The bot node will pick the highest score from children.
  * The player node will pick the smallest score from children.
 
@@ -110,7 +110,7 @@ As an example, let's say it's the bot's turn and that it has two children.
 
  1. Bot's turn, `root` node: Wants to pick the highest score from children. It will populate the first child node, call it `A`, and get it's score. Next, it will have to find the score for the second child, call it `B`.
 
- 2. Opponent's turn, node `B`: Wants to pick the lowest score from children. It has 3 child `B1, B2, B3`. It wants to iterate through each one of those to get the lowest score *BUT* it also knows that **the biggest score that the `root` node has found is from node `A`**. So we pass that biggest score to each of the children.
+ 2. Opponent's turn, node `B`: Wants to pick the lowest score from children. It has 3 child `B1, B2, B3`. It wants to iterate through each one of those to get the lowest score *BUT* it also knows that **the biggest score that the `root` node has found is from node `A`**. It will also pass that biggest score as argument to each of the children.
 
  3. Bot's turn, node `B1`: Wants to pick the highest score. Re-iteration of step 1 and returns the biggest score to node `B`.
 
