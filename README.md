@@ -71,9 +71,11 @@ We have a tree where each depth represents a move made on the board.
 The scores are calculated at the leaf nodes when the game ends, returning a score of 1 if the bot wins, 0 for a tie, and -1 for a loss. This is known as the **static score**.
 Then the scores are passed to the parents until it reached the root node.
 
-##### ~~Average Score~~
+#### ~~Average Score~~
 
 ![Average score error](https://cloud.githubusercontent.com/assets/12219300/17845944/723258d6-67fa-11e6-855c-02f494d717d2.jpeg)
+
+Photo credit: [Alaric](https://github.com/AlaricGonzales)
 
 The first idea was to select the highest average scores from the children nodes to get the best possible chance of winning.
 The idea was that the children with the higher average score will lead to higher chance of winning.
@@ -82,7 +84,7 @@ It made the bot too focused on selecting the moves that leads it to higher chanc
 What this means is that, even if the opponent is about to win in the next turn, the bot will continue to go towards a move where it *CAN* lead to higher chances of winning instead of blocking.
 Because the bot doesn't block the opponent's moves, the bot often loses and was not unbeatable as we wanted it to be.
 
-##### MiniMax Score
+#### MiniMax Score
 
 MiniMax is the idea of minimizing the opponent's maximum score.
 It goes like this:
@@ -95,7 +97,7 @@ So the bot will pick moves that will give the opponent the lowest score possible
 By using this method, the bot will continuously block the opponent's moves, preventing them from winning, while also going for any possible victories.
 As a result, using the MiniMax algorithm allowed us to create an unbeatable bot in Tic-Tac-Toe.
 
-##### Alpha-Beta Pruning
+#### Alpha-Beta Pruning
 
 Alpha-Beta pruning is a way of reducing the amount of search by not exploring the child nodes that will never be searched.
 This is done by having two variables with given names *alpha* and *beta* to keep track of scores for alpha-cutoff and beta-cutoff.
@@ -124,4 +126,4 @@ This [Alpha-Beta pruning practice](http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-
 ---
 
 ### Acknowledgements
-My mentor [Rey](https://github.com/reygonzales) for guiding us through the assignment. This assignment was done together with  [Alaric](https://github.com/AlaricGonzales) at our internship at PlanChat.
+My mentor [Rey](https://github.com/reygonzales) for guiding us through the assignment. This assignment was done together with [Alaric](https://github.com/AlaricGonzales) at our internship at PlanChat.
