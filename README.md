@@ -104,20 +104,22 @@ Chris Thronton explains in [his lecture](http://users.sussex.ac.uk/%7Echrist/crs
 > * Applying a **beta-cutoff** means we stop search of a particular branch because we see that the opponent already has a better opportunity elsewhere.
 
 So where does Alpha-Beta pruning come in?
-Let's say it's the bot's turn and that it has two children.
+As an example, let's say it's the bot's turn and that it has two children.
 
- 1. Bot's turn, root node: Wants to pick the highest score from children. It will populate the first child node, call it `A`, and get it's score. Next, it will have to find the score for the second child, call it `B`.
+ 1. Bot's turn, `root` node: Wants to pick the highest score from children. It will populate the first child node, call it `A`, and get it's score. Next, it will have to find the score for the second child, call it `B`.
 
- 2. Opponent's turn, node `B`: Wants to pick the lowest score from children. We look at each child node of `B`, call them `B1, B2, B3, ..., Bn where n is any positive integer`.
+ 2. Opponent's turn, node `B`: Wants to pick the lowest score from children. It has 3 child `B1, B2, B3`. It wants to iterate through each one of those to get the lowest score *BUT* it also knows that **the biggest score that the `root` node has found is from node `A`**. So we pass that biggest score to each of the children.
 
- 3. Bot's turn, node `B1, ..., Bn`: Re-iteration of step 1, with a plus. We know the score that node `A` got.
+ 3. Bot's turn, node `B1`: Wants to pick the highest score. Re-iteration of step 1 and returns the biggest score to node `B`.
 
+ 4. Opponent's turn, back to node `B`: Now we have the score of `B1`. If the score of `B1` is smaller than the score from `root` node, then it doesn't have to search child nodes `B2` and  `B3`. The node `B` will pick a score from `B1` or smaller and the `root` node will pick a score bigger than score from `B1`. Because of that, the `root` node will end up never picking from the node `B`.
 
-If any child node of `B` is bigger than the score from `A`, then we stop exploring the second child `B`.
-That is because we are assuming that the player will pick the highest score, and since a child node of `B` is bigger than the score from `A`, it will pick at least a score bigger than `A`.
-Then if we go back to the bot's perspective and compare node `A` and node `B`, the bot will definitely pick `A` because `A` has a smaller score than `B` and the bot wants to get the smallest score.
+So cutoffs happen when **alpha >= beta**.
+Alpha is the biggest score that the `root` node might pick and beta is the smallest score that the `B` might pick.
+Then `B1, B2, B3` can sets the highest alpha.
+`B` compares if `B1` alpha is bigger than or equal to `B` beta and decides to do a cutoff if it does.
 
-Cut-offs are when *alpha* >= *beta*
+This [Alpha-Beta pruning practice](http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/) is a very neat tool that can help visualize how the process goes.
 
 ---
 

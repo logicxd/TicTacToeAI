@@ -286,11 +286,13 @@ static NSInteger count = 0;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
             score = [self alphaBetaScoreWithBoard:board alpha:blockAlpha beta:blockBeta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
-            // Bot made the move.
+            // Bot made the move. Maximizing Player.
             if ([score integerValue] > [blockAlpha integerValue]) {
                 blockAlpha = score;
             }
             
+            // Stop the tree. The parent will pick another child tree because this tree has a lower score than that tree.
+            // Parent is the minimizer.
             if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
                 *stop = YES;
             }
@@ -307,12 +309,14 @@ static NSInteger count = 0;
             NSDictionary *board = [self markBoard:parentBoard positionIndex:key symbol:symbol];
             score = [self alphaBetaScoreWithBoard:board alpha:alpha beta:beta depthLevel:@([depthLevel integerValue] + 1) depthToStopAtInclusively:depthToStopAt];
             
-            // Player made the move.
+            // Player made the move. Minimizing player.
             if ([score integerValue] < [blockBeta integerValue]) {
                 blockBeta = score;
             }
             
-            if ([blockAlpha integerValue] >= [blockBeta integerValue]) {
+            // Stop the tree. The parent will pick another child tree because this tree has a lower score than that tree.
+            // Parent is the maximizer.
+            if ([blockBeta integerValue] <= [blockAlpha integerValue]) {
                 *stop = YES;
             }
             count++;
